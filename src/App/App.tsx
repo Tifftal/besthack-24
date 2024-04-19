@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.modules.scss'
-import RegistrationPage from './pages/RegistrationPage'
 import LoginPage from './pages/LoginPage'
+import RegistrationPage from './pages/RegistrationPage'
 
 function App() {
 
