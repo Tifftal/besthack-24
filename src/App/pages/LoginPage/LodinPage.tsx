@@ -84,7 +84,7 @@ const LoginPage = () => {
       <div className="login-page-img">IMG</div>
 
       <div className="login-page-form">
-        {profile.length != 0 ? (
+        {profile ? (
           <div>
             <img src={profile.picture} alt="token image" />
             <h3>token Logged in</h3>
