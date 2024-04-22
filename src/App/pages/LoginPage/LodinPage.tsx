@@ -18,17 +18,7 @@ const LoginPage = () => {
     console.log('Что-то пошло не так: ', error);
     // Здесь можно обработать ошибку, если нужно
   };
-  // useEffect(() => {
-  //   google.accounts.id.initialize({
-  //     client_id: '698624114614-gja8hv8pe82c6gkgak4po4fb3jdu17r4.apps.googleusercontent.com',
-  //     callback: handleCallbackResponse,
-  //   });
-
-  //   google.accounts.id.renderButton(
-  //     document.getElementById('signInDiv'),
-  //     {theme: "outline", size: "large"}
-  //   )
-  // }, []);
+  
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
 
@@ -67,7 +57,7 @@ const LoginPage = () => {
   // log out function to log the user out of google and set the profile array to null
   const logOut = () => {
     googleLogout();
-    store.dispatch({ type: 'LOGOUT'});
+    store.dispatch({ type: 'LOGOUT' });
     setProfile(null);
   };
 
@@ -87,26 +77,18 @@ const LoginPage = () => {
       <div className="login-page-img">IMG</div>
 
       <div className="login-page-form">
-        {profile && profile.length !== 0 ? (
-          <div>
-            <img src={profile.picture} alt="token image" />
-            <h3>token Logged in</h3>
-            <p>Name: {profile.name}</p>
-            <p>Email Address: {profile.email}</p>
-            <br />
-            <br />
-            <button onClick={logOut}>Log out</button>
-          </div>
-        ) : (
-          <button onClick={login}>Sign in with Google 🚀 </button>
-        )}
-
         <form onSubmit={form.onSubmit(console.log)} style={{ width: '100%' }}>
           <TextInput mt="sm" label="Email" placeholder="Email" {...form.getInputProps('email')} />
           <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
           <Button type="submit" mt="sm" onClick={() => navigate('/')}>
             Submit
           </Button>
+          {profile && profile.length !== 0 ? (
+            <button onClick={logOut}>Log out</button>
+          ) : (
+            <button onClick={login}>Sign in with Google 🚀 </button>
+          )}
+{/* Я бы удалил эту штуку, но вдруг кто-то есть герой */}
           <YaOAuthButton onSuccess={handlYaSuccess} onError={handleYaError} />
         </form>
       </div>
