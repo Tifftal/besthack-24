@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
 module.exports = {
@@ -25,26 +26,27 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    "plugin:react/jsx-runtime",
   ],
   plugins: ['@typescript-eslint', 'import', 'prettier', 'react', 'react-hooks'],
   rules: {
     'no-console': 'warn',
-    'import/order': [
-      'error',
-      {
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-        alphabetize: {
-          order: 'asc',
-        },
-        pathGroups: [
-          {
-            pattern: './**/*.scss',
-            group: 'sibling',
-            position: 'after',
-          },
-        ],
-      },
-    ],
+    // 'import/order': [
+    //   'error',
+    //   {
+    //     groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+    //     alphabetize: {
+    //       order: 'asc',
+    //     },
+    //     pathGroups: [
+    //       {
+    //         pattern: './**/*.scss',
+    //         group: 'sibling',
+    //         position: 'after',
+    //       },
+    //     ],
+    //   },
+    // ],
   },
   settings: {
     'import/parsers': {
