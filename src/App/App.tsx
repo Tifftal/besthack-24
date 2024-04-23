@@ -4,7 +4,7 @@ import RegistrationPage from './pages/RegistrationPage'
 import MainPage from './pages/MainPage'
 
 import styles from './App.module.scss'
-import AdminPage from './pages/AdminPage/AdminPage'
+
 
 function App() {
   return (
