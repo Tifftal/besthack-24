@@ -6,7 +6,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // import YaOAuthButton from './components/yaButton';
 import store from '../../store';
-import { login } from 'App/api/user';
+import { login } from '../../api/user/index';
 import { IconBrandGoogleFilled } from '@tabler/icons-react';
 
 import styles from './LoginPage.module.scss';
@@ -31,6 +31,7 @@ const LoginPage = () => {
         console.log(res.data);
         store.dispatch({ type: 'SET_USER', payload: res.data });
         console.log(store.getState());
+        navigate('/')
       })
       .catch((err) => console.log(err));
   };
@@ -76,7 +77,7 @@ const LoginPage = () => {
 
     return (
         <div className={styles["login-page"]}>
-            <form onSubmit={form.onSubmit(console.log)} className={styles["login-page-form"]}>
+            <form onSubmit={form.onSubmit(handleLogin)} className={styles["login-page-form"]}>
                 <TextInput mt="sm" label="Логин" placeholder="Логин" {...form.getInputProps('email')} />
                 <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
                 <div className={styles['login-page-form-btn']}>
@@ -86,7 +87,7 @@ const LoginPage = () => {
                         <Button
                             variant="default"
                             mt="sm"
-                            onClick={login}
+                            onClick={loginG}
                             leftSection={<IconBrandGoogleFilled />}
                         >
                             Войти через Google
