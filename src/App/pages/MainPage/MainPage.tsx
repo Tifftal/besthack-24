@@ -1,9 +1,16 @@
 import styles from './MainPage.module.scss';
 import { Button, Flex, Group, Tabs, Text, rem } from '@mantine/core';
 import { IconHistory, IconPlus, IconSettings } from '@tabler/icons-react';
+import History from './components/History';
+import Control from './components/Control';
+import NewPush from './components/NewPush';
+import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
+    const navigate = useNavigate();
+
     const iconStyle = { width: rem(15), height: rem(15) };
+
     return (
         <div className={styles['main-page']}>
             <Tabs defaultValue="history">
@@ -24,20 +31,20 @@ const MainPage = () => {
                     >
                         <Text size="md" fw={400} mr={8}>Вы вошли как</Text>
                         <Text mr={30} fw={600} c='blue'>Варвара</Text>
-                        <Button variant='outline' className={styles['main-page-logout-btn']}>Выйти</Button>
+                        <Button variant='outline' className={styles['main-page-logout-btn']} onClick={() => navigate('/login')}>Выйти</Button>
                     </Flex>
                 </Tabs.List>
 
                 <Tabs.Panel value="history">
-                    Gallery tab content
+                    <History />
                 </Tabs.Panel>
 
                 <Tabs.Panel value="settings">
-                    Messages tab content
+                    <Control />
                 </Tabs.Panel>
 
                 <Tabs.Panel value="new-push">
-                    Settings tab content
+                    <NewPush />
                 </Tabs.Panel>
             </Tabs>
         </div >
