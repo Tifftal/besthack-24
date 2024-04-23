@@ -1,11 +1,12 @@
-import { TextInput, Button, PasswordInput } from '@mantine/core';
+import { TextInput, Button, PasswordInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import YaOAuthButton from './components/yaButton';
 import store from '../../store';
+import { IconBrandGoogleFilled } from '@tabler/icons-react';
 
 import styles from './LoginPage.module.scss';
 
@@ -67,30 +68,37 @@ const LoginPage = () => {
         mode: 'uncontrolled',
         validateInputOnBlur: true,
         initialValues: { name: '', email: '', age: 0 },
-
-        validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-        },
     });
 
     return (
         <div className={styles["login-page"]}>
-            <div className={styles["login-page-form"]}>
-                <form onSubmit={form.onSubmit(console.log)} style={{ width: '100%' }}>
-                    <TextInput mt="sm" label="Email" placeholder="Email" {...form.getInputProps('email')} />
-                    <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
+            <form onSubmit={form.onSubmit(console.log)} className={styles["login-page-form"]}>
+                <TextInput mt="sm" label="Логин" placeholder="Логин" {...form.getInputProps('email')} />
+                <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
+                <div className={styles['login-page-form-btn']}>
                     <Button type="submit" mt="sm" onClick={() => navigate('/')}>
-                        Submit
+                        Войти
                     </Button>
                     {profile && profile.length !== 0 ? (
                         <button onClick={logOut}>Log out</button>
                     ) : (
-                        <button onClick={login}>Sign in with Google 🚀 </button>
+                        <Button
+                            variant="default"
+                            mt="sm"
+                            onClick={login}
+                            leftSection={<IconBrandGoogleFilled />}
+                        >
+                            Войти через Google
+                        </Button>
                     )}
-                    {/* Я бы удалил эту штуку, но вдруг кто-то есть герой */}
-                    <YaOAuthButton onSuccess={handlYaSuccess} onError={handleYaError} />
-                </form>
-            </div>
+                </div>
+                <div className={styles['login-page-form-reg']}>
+                    <Text>Ещё нет аккаунта?</Text>
+                    <NavLink to='/registration'>Зарегестрироваться</NavLink>
+                </div>
+                {/* Я бы удалил эту штуку, но вдруг кто-то есть герой */}
+                {/* <YaOAuthButton onSuccess={handlYaSuccess} onError={handleYaError} /> */}
+            </form>
         </div>
     );
 };
