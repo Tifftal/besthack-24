@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import YaOAuthButton from './components/yaButton';
 import store from '../../store';
-import image from '../../../assets/5153829.jpg';
 
 import styles from './LoginPage.module.scss';
 
