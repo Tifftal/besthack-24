@@ -1,9 +1,10 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import RegistrationPage from "./pages/RegistrationPage";
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import LoginPage from './pages/LoginPage'
+import RegistrationPage from './pages/RegistrationPage'
+import MainPage from './pages/MainPage'
 
 import styles from './App.module.scss'
-import AdminPage from './pages/AdminPage/AdminPage'
+
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         <Routes>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/registration' element={<RegistrationPage />} />
-          <Route path='/admin' element={<AdminPage />} />
+          <Route path='/' element={<MainPage />} />
         </Routes>
       </BrowserRouter>
     </div>
