@@ -1,0 +1,66 @@
+.push {
+    min-width: 300px;
+    margin-top: 10px;
+    animation: fadeIn 0.5s ease-out forwards, fadeOut 0.5s ease-in 5.5s forwards;
+    opacity: 0;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        height: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        height: 0;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.push-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #ccc;
+}
+
+.push-progress {
+    height: 100%;
+    background-color: gray;
+    animation: progress 5s linear forwards;
+}
+
+@keyframes progress {
+    0% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0;
+    }
+}
+
+.push-wrapper {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    height: 100vh;
+    background-color: transparent;
+}

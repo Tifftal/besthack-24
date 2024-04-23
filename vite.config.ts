@@ -24,4 +24,7 @@ export default defineConfig({
   resolve: {
     alias: parseTsConfigPaths(tsconfig.compilerOptions.paths),
   },
+  server: {
+    port: 3000,
+  }
 })
