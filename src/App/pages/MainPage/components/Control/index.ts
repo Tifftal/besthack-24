@@ -1,1 +1,1 @@
-export { default } from './Consrol';
+export { default } from './Control';

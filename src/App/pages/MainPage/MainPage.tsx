@@ -1,5 +1,5 @@
 import styles from './MainPage.module.scss';
-import { Button, Flex, Group, Tabs, Text, rem } from '@mantine/core';
+import { Button, Flex, Tabs, Text, rem } from '@mantine/core';
 import { IconHistory, IconPlus, IconSettings } from '@tabler/icons-react';
 import History from './components/History';
 import Control from './components/Control';
@@ -19,7 +19,7 @@ const MainPage = () => {
                         История
                     </Tabs.Tab>
                     <Tabs.Tab value="settings" leftSection={<IconSettings style={iconStyle} />}>
-                        Управление аккаунтами
+                        Управление
                     </Tabs.Tab>
                     <Tabs.Tab value="new-push" leftSection={<IconPlus style={iconStyle} />}>
                         Новое уведомление
