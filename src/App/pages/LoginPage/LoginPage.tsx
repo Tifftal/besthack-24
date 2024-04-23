@@ -1,49 +1,30 @@
 import { TextInput, Button, PasswordInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useGoogleLogin } from '@react-oauth/google';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import YaOAuthButton from './components/yaButton';
-import { setUser as setUserToStore } from '../../store/UserSlice/UserSlice';
-import { store } from '../../store/store';
-import { login } from '../../api/user/index';
+import YaOAuthButton from './components/yaButton';
+import store from '../../store';
 import { IconBrandGoogleFilled } from '@tabler/icons-react';
 
 import styles from './LoginPage.module.scss';
-import { useDispatch } from 'react-redux';
 
 const LoginPage = () => {
-  //   const handlYaSuccess = (data) => {
-  //     console.log('Сообщение с токеном: ', data);
-  //     // Здесь можно установить состояние компонента с данными, если нужно
-  //   };
-
-  //   const handleYaError = (error) => {
-  //     console.log('Что-то пошло не так: ', error);
-  //     // Здесь можно обработать ошибку, если нужно
-  //   };
-  const dispatch = useDispatch();
-
-  const [user, setUser] = useState([]);
-  //   const [profile, setProfile] = useState([]);
-
-  const handleLogin = () => {
-    login(form.values.email, form.values.password)
-      .then((res) => {
-        console.log(res);
-        if (res.jwtTokens) {
-          localStorage.setItem('atoken', res.jwtTokens.access);
-          localStorage.setItem('rtoken', res.jwtTokens.refresh);
-        }
-        // store.dispatch({ type: 'SET_USER', payload: res.data });
-        dispatch(setUserToStore(res.data))
-        navigate('/')
-      })
-      .catch((err) => console.log(err));
+  const handlYaSuccess = (data) => {
+    console.log('Сообщение с токеном: ', data);
+    // Здесь можно установить состояние компонента с данными, если нужно
   };
 
-  const loginG = useGoogleLogin({
+  const handleYaError = (error) => {
+    console.log('Что-то пошло не так: ', error);
+    // Здесь можно обработать ошибку, если нужно
+  };
+
+  const [user, setUser] = useState([]);
+  const [profile, setProfile] = useState([]);
+
+  const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),
     onError: (error) => console.log('Login Failed:', error),
   });
@@ -60,7 +41,7 @@ const LoginPage = () => {
         })
         .then((res) => {
           console.log(res.data);
-          //   setProfile(res.data);
+          setProfile(res.data);
           store.dispatch({ type: 'SET_USER', payload: res.data });
           console.log(store.getState());
           // sent the data to the backend
@@ -75,30 +56,41 @@ const LoginPage = () => {
     }
   }, [user]);
 
+  // log out function to log the user out of google and set the profile array to null
+  const logOut = () => {
+    googleLogout();
+    store.dispatch({ type: 'LOGOUT' });
+    setProfile(null);
+  };
+
   const navigate = useNavigate();
   const form = useForm({
+    mode: 'uncontrolled',
     validateInputOnBlur: true,
-    initialValues: { name: '', email: '', age: 0, password: '' },
+    initialValues: { name: '', email: '', age: 0 },
   });
 
   return (
     <div className={styles["login-page"]}>
-      <form onSubmit={form.onSubmit(handleLogin)} className={styles["login-page-form"]}>
+      <form onSubmit={form.onSubmit(console.log)} className={styles["login-page-form"]}>
         <TextInput mt="sm" label="Логин" placeholder="Логин" {...form.getInputProps('email')} />
         <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
         <div className={styles['login-page-form-btn']}>
-          <Button type="submit" mt="sm">
+          <Button type="submit" mt="sm" onClick={() => navigate('/')}>
             Войти
           </Button>
-          <Button
-            variant="default"
-            mt="sm"
-            onClick={loginG}
-            leftSection={<IconBrandGoogleFilled />}
-          >
-            Войти через Google
-          </Button>
-
+          {profile && profile.length !== 0 ? (
+            <button onClick={logOut}>Log out</button>
+          ) : (
+            <Button
+              variant="default"
+              mt="sm"
+              onClick={login}
+              leftSection={<IconBrandGoogleFilled />}
+            >
+              Войти через Google
+            </Button>
+          )}
         </div>
         <div className={styles['login-page-form-reg']}>
           <Text>Ещё нет аккаунта?</Text>
