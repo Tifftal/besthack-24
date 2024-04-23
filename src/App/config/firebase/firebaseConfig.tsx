@@ -2,22 +2,22 @@ import { initializeApp } from "firebase/app";
 import { getToken, getMessaging, isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC1plcKKBX0rYcyjHwzTlWe7ErIaPvFPZ8",
-  authDomain: "rt5-hack-72cd0.firebaseapp.com",
-  projectId: "rt5-hack-72cd0",
-  storageBucket: "rt5-hack-72cd0.appspot.com",
-  messagingSenderId: "472912746541",
-  appId: "1:472912746541:web:6d01058b7ba41473d480a4",
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
 const UrlFirebaseConfig = new URLSearchParams(
   {
-    apiKey: "AIzaSyC1plcKKBX0rYcyjHwzTlWe7ErIaPvFPZ8",
-    authDomain: "rt5-hack-72cd0.firebaseapp.com",
-    projectId: "rt5-hack-72cd0",
-    storageBucket: "rt5-hack-72cd0.appspot.com",
-    messagingSenderId: "472912746541",
-    appId: "1:472912746541:web:6d01058b7ba41473d480a4",
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID,
   }.toString()
 );
 
@@ -66,7 +66,7 @@ export const getFirebaseToken = async () => {
       return getOrRegisterServiceWorker().then((serviceWorkerRegistration) => {
         return Promise.resolve(
           getToken(messagingResolve, {
-            vapidKey: "BNY5dN_lF_WR7pREMgkNyzFpFLUtDgimpIecAemnKIcXMdNrtAK-OTuerB7U3-TbUYlfBgQkdOrSp-wC7s45gOs",
+            vapidKey: import.meta.env.VITE_FB_VAPID_KEY,
             serviceWorkerRegistration,
           })
         );
