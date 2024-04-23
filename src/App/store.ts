@@ -1,11 +1,12 @@
 import { Reducer, configureStore } from '@reduxjs/toolkit';
+import { RegResponse } from './pages/RegistrationPage/RegistrationPage';
 
 export type Action = { type: string; payload?: unknown };
 
-const sessionReducer = (state = { user: null }, action: Action) => {
+const sessionReducer = (state: RegResponse = null, action: Action) => {
   switch (action.type) {
     case 'SET_USER':
-      return { ...state, user: action.payload };
+      return { ...state, state: action.payload };
     case 'LOGOUT':
       return { ...state, user: null };
     default:

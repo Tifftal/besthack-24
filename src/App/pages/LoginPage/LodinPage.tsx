@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import YaOAuthButton from './components/yaButton';
 import store from '../../store';
+import { login } from 'App/api/user';
 
 import styles from './LoginPage.module.scss';
 
@@ -23,7 +24,17 @@ const LoginPage = () => {
     const [user, setUser] = useState([]);
     const [profile, setProfile] = useState([]);
 
-    const login = useGoogleLogin({
+    const handleLogin = () => {
+            login(form.values.email, form.values.password)
+            .then((res) => {
+                console.log(res.data);
+                store.dispatch({ type: 'SET_USER', payload: res.data });
+                console.log(store.getState());
+            })
+            .catch((err) => console.log(err));
+    };
+
+    const loginG = useGoogleLogin({
         onSuccess: (codeResponse) => setUser(codeResponse),
         onError: (error) => console.log('Login Failed:', error),
     });
@@ -66,7 +77,7 @@ const LoginPage = () => {
     const form = useForm({
         mode: 'uncontrolled',
         validateInputOnBlur: true,
-        initialValues: { name: '', email: '', age: 0 },
+        initialValues: { name: '', email: '', age: 0, password: ''},
 
         validate: {
             email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
@@ -76,7 +87,7 @@ const LoginPage = () => {
     return (
         <div className={styles["login-page"]}>
             <div className={styles["login-page-form"]}>
-                <form onSubmit={form.onSubmit(console.log)} style={{ width: '100%' }}>
+                <form onSubmit={form.onSubmit(handleLogin)} style={{ width: '100%' }}>
                     <TextInput mt="sm" label="Email" placeholder="Email" {...form.getInputProps('email')} />
                     <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
                     <Button type="submit" mt="sm" onClick={() => navigate('/')}>
@@ -85,7 +96,7 @@ const LoginPage = () => {
                     {profile && profile.length !== 0 ? (
                         <button onClick={logOut}>Log out</button>
                     ) : (
-                        <button onClick={login}>Sign in with Google 🚀 </button>
+                        <button onClick={loginG}>Sign in with Google 🚀 </button>
                     )}
                     {/* Я бы удалил эту штуку, но вдруг кто-то есть герой */}
                     <YaOAuthButton onSuccess={handlYaSuccess} onError={handleYaError} />
