@@ -28,9 +28,12 @@ const LoginPage = () => {
   const handleLogin = () => {
     login(form.values.email, form.values.password)
       .then((res) => {
-        console.log(res.data);
+        console.log(res);
+        if (res.jwtTokens) {
+          localStorage.setItem('atoken', res.jwtTokens.access);
+          localStorage.setItem('rtoken', res.jwtTokens.refresh);
+        }
         store.dispatch({ type: 'SET_USER', payload: res.data });
-        console.log(store.getState());
         navigate('/')
       })
       .catch((err) => console.log(err));
@@ -70,7 +73,6 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
     const form = useForm({
-        mode: 'uncontrolled',
         validateInputOnBlur: true,
         initialValues: { name: '', email: '', age: 0, password: '' },
     });
