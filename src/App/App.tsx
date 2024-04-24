@@ -3,7 +3,7 @@ import LoginPage from './pages/LoginPage'
 import RegistrationPage from './pages/RegistrationPage'
 import MainPage from './pages/MainPage'
 import ProfilePage from './pages/ProfilePage'
-import style
+import styles from './App.module.scss';
 
 function App() {
   return (
