@@ -34,10 +34,13 @@ export const login = async (username: string, password: string) => {
   return response.data;
 };
 
-export const register = async (username: string, password: string) => {
+export const register = async (username: string, password: string, name: string, middleName: string, surname: string) => {
   const { data, status } = await apiInstance.post(ENDPOINTS.register, {
     username,
     password,
+    name,
+    middleName,
+    surname,
   });
 
   if (status === 400) {
