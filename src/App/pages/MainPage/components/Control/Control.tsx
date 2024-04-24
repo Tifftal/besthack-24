@@ -52,13 +52,32 @@ const Control = () => {
                         </form>
                     </Accordion.Panel>
                 </Accordion.Item>
-                <Accordion.Item key='law' value='law'>
-                    <Accordion.Control>Редактировать права</Accordion.Control>
+                <Accordion.Item key='law_dep' value='law_dep'>
+                    <Accordion.Control>Права отделов</Accordion.Control>
                     <Accordion.Panel>
-                        <div className={styles['constrol-law']}>
-                            <div>
+                        <div className={styles['control-law']}>
+                            <div className={styles['control-law-departments']}>
+                                <Input placeholder='Поиск' />
                                 {
-                                    departments.map(item => (<p>{item.name}</p>))
+                                    departments.map(item => (
+                                        item.name === '' ? null : <button>{item.name}</button>
+                                    ))
+                                }
+                            </div>
+                            <div></div>
+                        </div>
+                    </Accordion.Panel>
+                </Accordion.Item>
+                <Accordion.Item key='law_user' value='law_user'>
+                    <Accordion.Control>Права пользователей</Accordion.Control>
+                    <Accordion.Panel>
+                        <div className={styles['control-law']}>
+                            <div className={styles['control-law-departments']}>
+                                <Input placeholder='Поиск' />
+                                {
+                                    departments.map(item => (
+                                        item.name === '' ? null : <button>{item.name}</button>
+                                    ))
                                 }
                             </div>
                             <div></div>
