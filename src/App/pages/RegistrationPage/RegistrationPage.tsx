@@ -2,8 +2,9 @@ import { TextInput, Button, PasswordInput } from '@mantine/core';
 import styles from './RegistrationPage.module.scss';
 import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
-import store from '../../store';
 import { generatePushToken, register } from '../../api/user/index';
+import { useDispatch } from '../../store/store';
+import { setUser } from '../../store/UserSlice/UserSlice';
 
 export type RegResponse = {
   id: string;
@@ -19,6 +20,8 @@ export type RegResponse = {
 const RegistrationPage = () => {
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const handleRegistration = async () => {
     try {
       const response = await register(form.values.username, form.values.password);
@@ -28,7 +31,9 @@ const RegistrationPage = () => {
         localStorage.setItem('rtoken', response.jwtTokens.refresh);
       }
 
-      store.dispatch({ type: 'SET_USER', payload: response });
+      // store.dispatch({ type: 'SET_USER', payload: response });
+
+      dispatch(setUser(response));
 
       const status = await generatePushToken();
 
