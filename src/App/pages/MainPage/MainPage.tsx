@@ -86,7 +86,7 @@ const MainPage = () => {
                         История
                     </Tabs.Tab>
                     <Tabs.Tab value="settings" leftSection={<IconSettings style={iconStyle} />}>
-                        Управление аккаунтами
+                        Управление
                     </Tabs.Tab>
                     <Tabs.Tab value="new-push" leftSection={<IconPlus style={iconStyle} />}>
                         Новое уведомление

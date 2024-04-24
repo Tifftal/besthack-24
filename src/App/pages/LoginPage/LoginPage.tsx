@@ -14,19 +14,19 @@ import styles from './LoginPage.module.scss';
 import { useDispatch } from 'react-redux';
 
 const LoginPage = () => {
-//   const handlYaSuccess = (data) => {
-//     console.log('Сообщение с токеном: ', data);
-//     // Здесь можно установить состояние компонента с данными, если нужно
-//   };
+  //   const handlYaSuccess = (data) => {
+  //     console.log('Сообщение с токеном: ', data);
+  //     // Здесь можно установить состояние компонента с данными, если нужно
+  //   };
 
-//   const handleYaError = (error) => {
-//     console.log('Что-то пошло не так: ', error);
-//     // Здесь можно обработать ошибку, если нужно
-//   };
+  //   const handleYaError = (error) => {
+  //     console.log('Что-то пошло не так: ', error);
+  //     // Здесь можно обработать ошибку, если нужно
+  //   };
   const dispatch = useDispatch();
 
   const [user, setUser] = useState([]);
-//   const [profile, setProfile] = useState([]);
+  //   const [profile, setProfile] = useState([]);
 
   const handleLogin = () => {
     login(form.values.email, form.values.password)
@@ -60,7 +60,6 @@ const LoginPage = () => {
         })
         .then((res) => {
           console.log(res.data);
-        //   setProfile(res.data);
           store.dispatch({ type: 'SET_USER', payload: res.data });
           console.log(store.getState());
           // sent the data to the backend
@@ -75,40 +74,40 @@ const LoginPage = () => {
     }
   }, [user]);
 
-    const navigate = useNavigate();
-    const form = useForm({
-        validateInputOnBlur: true,
-        initialValues: { name: '', email: '', age: 0, password: '' },
-    });
+  const navigate = useNavigate();
+  const form = useForm({
+    validateInputOnBlur: true,
+    initialValues: { name: '', email: '', age: 0, password: '' },
+  });
 
-    return (
-        <div className={styles["login-page"]}>
-            <form onSubmit={form.onSubmit(handleLogin)} className={styles["login-page-form"]}>
-                <TextInput mt="sm" label="Логин" placeholder="Логин" {...form.getInputProps('email')} />
-                <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
-                <div className={styles['login-page-form-btn']}>
-                    <Button type="submit" mt="sm">
-                        Войти
-                    </Button>
-                        <Button
-                            variant="default"
-                            mt="sm"
-                            onClick={loginG}
-                            leftSection={<IconBrandGoogleFilled />}
-                        >
-                            Войти через Google
-                        </Button>
-             
-                </div>
-                <div className={styles['login-page-form-reg']}>
-                    <Text>Ещё нет аккаунта?</Text>
-                    <NavLink to='/registration'>Зарегестрироваться</NavLink>
-                </div>
-                {/* Я бы удалил эту штуку, но вдруг кто-то есть герой */}
-                {/* <YaOAuthButton onSuccess={handlYaSuccess} onError={handleYaError} /> */}
-            </form>
+  return (
+    <div className={styles["login-page"]}>
+      <form onSubmit={form.onSubmit(handleLogin)} className={styles["login-page-form"]}>
+        <TextInput mt="sm" label="Логин" placeholder="Логин" {...form.getInputProps('email')} />
+        <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
+        <div className={styles['login-page-form-btn']}>
+          <Button type="submit" mt="sm">
+            Войти
+          </Button>
+          <Button
+            variant="default"
+            mt="sm"
+            onClick={loginG}
+            leftSection={<IconBrandGoogleFilled />}
+          >
+            Войти через Google
+          </Button>
+
         </div>
-    );
+        <div className={styles['login-page-form-reg']}>
+          <Text>Ещё нет аккаунта?</Text>
+          <NavLink to='/registration'>Зарегестрироваться</NavLink>
+        </div>
+        {/* Я бы удалил эту штуку, но вдруг кто-то есть герой */}
+        {/* <YaOAuthButton onSuccess={handlYaSuccess} onError={handleYaError} /> */}
+      </form>
+    </div>
+  );
 };
 
 export default LoginPage;

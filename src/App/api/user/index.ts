@@ -27,7 +27,7 @@ export const login = async (username: string, password: string) => {
     throw new Error('Conflict');
   }
 
-    return response.data;
+  return response.data;
 };
 
 export const register = async (username: string, password: string) => {
@@ -40,7 +40,7 @@ export const register = async (username: string, password: string) => {
     throw new Error('Bad request');
   }
 
-  if (status === 401) {  
+  if (status === 401) {
     throw new Error('Unauthorized');
   }
 
@@ -82,7 +82,7 @@ export const generatePushToken = async () => {
     const firebaseToken = await getFirebaseToken();
     if (firebaseToken) {
       const { status } = await apiInstance.post(`${ENDPOINTS.push}?token=${firebaseToken}`);
-  
+
       return status;
     }
   } catch (error) {
