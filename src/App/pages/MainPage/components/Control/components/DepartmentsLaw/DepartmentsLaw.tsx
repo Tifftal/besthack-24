@@ -3,7 +3,7 @@ import { IconCheckbox, IconEdit, IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDepartmentState } from 'App/store/DepartmentSlice/departmentSelector';
-import { getDepartmentById, getDepartments, getDepartmentUsers, updateCanSendToDepartment, updateDepartment } from 'App/api/department/index';
+import { bindUserToDepartment, getDepartmentById, getDepartments, updateCanSendToDepartment, updateDepartment } from 'App/api/department/index';
 import { setDepartments, updateDepartments } from 'App/store/DepartmentSlice/DepatmentSlice';
 
 import classes from './DepartmentsLaw.module.css';
@@ -74,12 +74,9 @@ const DepartmentsLaw = () => {
             .catch(error => {
                 console.log(error)
             })
-        getUsers({
-            hasDepartment: false
-        })
+        getUsers({})
             .then(response => {
                 setAllUsers(response.content)
-                console.log(response.content)
             })
             .catch(error => {
                 console.log(error)
@@ -134,21 +131,48 @@ const DepartmentsLaw = () => {
         }
     }
 
-    const handleRemoveUser = (userId) => {
+    const handleRemoveUser = (userId: string) => {
         setSelectedUsers((prevSelectedUsers) =>
             prevSelectedUsers.filter((user) => user.id !== userId)
         );
     };
 
+    const AddUsersToDepartment = (department_id: string, users: [], role: string) => {
+        let chosenRole = [];
+        if (role === 'ROLE_EMPLOYEE') {
+            chosenRole.push('ROLE_EMPLOYEE', 'ROLE_USER')
+        } else {
+            chosenRole.push('ROLE_USER')
+        }
+        console.log(chosenRole)
+        users.map(user => {
+            bindUserToDepartment(department_id, user.id, chosenRole)
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        })
+        setSelectedUsers([]);
+        close();
+    }
+
+
     return (
         <div className={styles['control-law']}>
-            <Modal opened={opened} onClose={close} title="Добавление в отдел" centered>
+            <Modal
+                opened={opened}
+                onClose={close}
+                title={addedRole === "ROLE_USER" ? 'Добавление пользователей' : 'Добавление сотрудников'}
+                centered
+            >
                 <Pill.Group>
                     {
                         selectedUsers.length !== 0 ?
                             selectedUsers.map(user =>
                                 <Pill
-                                    styles={{ root: { marginBottom: 20 } }}
+                                    styles={{ root: { marginBottom: 10 } }}
                                     withRemoveButton
                                     onRemove={() => handleRemoveUser(user.id)}
                                 >
@@ -158,18 +182,37 @@ const DepartmentsLaw = () => {
                             : null
                     }
                 </Pill.Group>
+                {
+                    selectedUsers.length !== 0 ?
+                        <Button
+                            styles={{ root: { marginBottom: 10 } }}
+                            fullWidth
+                            onClick={() => AddUsersToDepartment(department.id, selectedUsers, addedRole)}
+                        >
+                            Добавить
+                        </Button> :
+                        null
+                }
                 <Input placeholder="Поиск" value={searchUser} onChange={handleSearchUser} />
                 <div className={styles['control-law-modal']}>
                     {allUsers.map((item) => {
-                        if (item.username.toLowerCase().includes(searchUser.toLowerCase())) {
+                        if (item.username.toLowerCase().includes(searchUser.toLowerCase())
+                            //это надо вернуть когда Родион наконец доделает регистрацию и у всех пользователей будут ФИО
+                            // ||
+                            // item.name.toLowerCase().includes(searchUser.toLowerCase()) ||
+                            // item.surname.toLowerCase().includes(searchUser.toLowerCase()) ||
+                            // item.middleName.toLowerCase().includes(searchUser.toLowerCase())
+                        ) {
                             if (item.name !== '' && !selectedUsers.find(user => user.id === item.id)) {
                                 return (
                                     <button
-                                        className={styles['control-law-departments-btn']}
+                                        className={styles['control-law-modal-btn']}
                                         key={item.id}
                                         onClick={() => setSelectedUsers(state => [...state, item])}
+
                                     >
-                                        {item.username}
+                                        <h5>{item.surname} {item.name} {item.middleName}</h5>
+                                        <p>{item.username}</p>
                                     </button>
                                 );
                             }
@@ -228,7 +271,7 @@ const DepartmentsLaw = () => {
                     />
                 </Input.Wrapper>
 
-                <Input.Wrapper label="Количество сотрудников">
+                <Input.Wrapper label="Количество пользователей">
                     <Input
                         classNames={{ input: classes.input }}
                         value={department?.amountOfPeople}

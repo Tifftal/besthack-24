@@ -16,6 +16,32 @@
             max-height: 400px;
             overflow: auto;
             margin-top: 10px;
+
+            &-btn {
+                display: flex;
+                flex-direction: column;
+                text-align: left;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                border-radius: calc(0.25rem * 1);
+                transition: .2s;
+
+                h5,
+                p {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                p {
+                    color: gray;
+                    font-size: 14px;
+                }
+            }
+
+            &-btn:hover {
+                background-color: #efefef;
+            }
         }
 
         &-departments {
