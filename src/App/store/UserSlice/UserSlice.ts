@@ -53,6 +53,7 @@ export const {
     setUser,
     refreshTokens,
     logout,
+    setUsers,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

@@ -8,3 +8,5 @@ export const selectUserState = (state: RootState) => state.user;
 // state передавать обязательно, иначе он не поймет откуда брать данные
 
 export const selectUsername = (state: RootState) => selectUserState(state).username;
+
+export const selectAllUsers = (state: RootState) => selectUserState(state).users;
