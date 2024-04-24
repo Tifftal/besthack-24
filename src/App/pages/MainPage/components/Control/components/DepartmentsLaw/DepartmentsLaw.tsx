@@ -1,9 +1,9 @@
-import { ActionIcon, Button, Input, MultiSelect } from '@mantine/core';
+import { ActionIcon, Button, Input, InputBase, MultiSelect, Pill } from '@mantine/core';
 import { IconCheckbox, IconEdit } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDepartmentState } from 'App/store/DepartmentSlice/departmentSelector';
-import { getDepartmentById, getDepartments, updateCanSendToDepartment, updateDepartment } from 'App/api/department/index';
+import { getDepartmentById, getDepartments, getDepartmentUsers, updateCanSendToDepartment, updateDepartment } from 'App/api/department/index';
 import { setDepartments, updateDepartments } from 'App/store/DepartmentSlice/DepatmentSlice';
 
 import classes from './DepartmentsLaw.module.css';
@@ -15,18 +15,11 @@ const DepartmentsLaw = () => {
     const [inputDepartmentName, setInputDepartmentName] = useState('');
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [hasChanged, setHasChanged] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const dispatch = useDispatch();
     const departments = useSelector(selectDepartmentState);
-
-    const handleMultiSelectChange = (selected: string[]) => {
-        setSelectedDepartments(selected);
-        setHasChanged(true)
-    };
-
-    const handleChangeName = (event: any) => {
-        setInputDepartmentName(event.target.value);
-    };
 
     useEffect(() => {
         getDepartments()
@@ -39,12 +32,34 @@ const DepartmentsLaw = () => {
             })
     }, [])
 
+    const handleMultiSelectChange = (selected: string[]) => {
+        setSelectedDepartments(selected);
+        setHasChanged(true)
+    };
+
+    const handleChangeName = (event: any) => {
+        setInputDepartmentName(event.target.value);
+    };
+
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
     const GetDepartmentById = (id: string) => {
+        console.log(id)
         getDepartmentById(id)
             .then(response => {
                 setDepartment(response)
                 setInputDepartmentName(response.name)
                 response.canSendTo !== undefined ? setSelectedDepartments(response.canSendTo?.map((item: { id: string; }) => item.id)) : setSelectedDepartments([]);
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        getDepartmentUsers(id)
+            .then(response => {
+                console.log(response.data.content)
+                setUsers(response.data.content)
             })
             .catch(error => {
                 console.log(error)
@@ -80,19 +95,26 @@ const DepartmentsLaw = () => {
     return (
         <div className={styles['control-law']}>
             <div className={styles['control-law-departments']}>
-                <Input placeholder='Поиск' />
-                {
-                    departments.map(item => (
-                        item.name === '' ? null :
-                            <button
-                                key={item.id}
-                                onClick={() => GetDepartmentById(item.id)}
-                                style={{ color: item.id === department?.id ? "#ac5b39" : 'black' }}
-                            >
-                                {item.name}
-                            </button>
-                    ))
-                }
+                <Input placeholder="Поиск" value={searchTerm} onChange={handleSearch} />
+                {departments.map((item) => {
+                    if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        return (
+                            item.name === '' ? null : (
+                                <button
+                                    key={item.id}
+                                    onClick={() => GetDepartmentById(item.id)}
+                                    style={{
+                                        color: item.id === department?.id ? '#ac5b39' : 'black',
+                                    }}
+                                >
+                                    {item.name}
+                                </button>
+                            )
+                        );
+                    } else {
+                        return null;
+                    }
+                })}
             </div>
             <div className={styles['control-law-info']}>
                 <Input.Wrapper label="Название">
@@ -149,6 +171,16 @@ const DepartmentsLaw = () => {
                 >
                     Сохранить
                 </Button>
+                <InputBase
+                    component="div"
+                    label="Сотрудники/пользователи отдела"
+                    multiline>
+                    <Pill.Group>
+                        {
+                            users.map(user => <Pill>test</Pill>)
+                        }
+                    </Pill.Group>
+                </InputBase>
             </div>
         </div>
     )

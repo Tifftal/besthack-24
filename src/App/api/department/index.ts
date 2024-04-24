@@ -2,8 +2,8 @@ import { apiInstance } from "../AxiosBaseApi";
 
 const ENDPOINTS = {
     department: '/main/department',
-    department_user: (id: string, userId: string) => `/department/${id}/user?userId=${userId}`,
-    department_users: (id: string, userId: string) => `/department/${id}/users?userId=${userId}`,
+    department_user: (id: string, userId: string) => `/main/department/${id}/user?userId=${userId}`,
+    department_users: (id: string) => `/main/department/${id}/users`,
 }
 
 export const getDepartments = async () => {
@@ -31,13 +31,12 @@ export const bindUserToDepartment = async (id: string, userId: string, roles: st
     return response.data;
 }
 
-export const getDepartmentUsers = async (id: string, userId: string) => {
-    const response = await apiInstance.get(ENDPOINTS.department_users(id, userId));
-    return response.data;
+export const getDepartmentUsers = async (id: string) => {
+    const response = await apiInstance.get(ENDPOINTS.department_users(id));
+    return response;
 }
 
 export const updateCanSendToDepartment = async (id: string, departments: string[]) => {
     const response = await apiInstance.put(ENDPOINTS.department + `/${id}/can-send-to`, departments);
-
     return response;
 }
