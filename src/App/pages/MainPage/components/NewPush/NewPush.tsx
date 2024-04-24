@@ -6,7 +6,7 @@ import { selectDepartmentState } from '../../../../store/DepartmentSlice/departm
 import { Button, Checkbox, Input, MultiSelect, Notification, Select, Textarea } from '@mantine/core';
 import { setUsers } from '../../../../store/UserSlice/UserSlice';
 import { getUsers } from '../../../../api/user/index';
-import { selectAllUsers } from '../../../../store/UserSlice/userSelector';
+import { selectAllUsers, selectUsersDepartments } from '../../../../store/UserSlice/userSelector';
 import { getNotificationColor } from '../../../../helpers/getNotificationColor';
 import { sendPushNotification } from '../../../../api/push/index';
 import { SendNotification } from '../../../../api/push/types';
@@ -16,6 +16,7 @@ const NewPush = () => {
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [hasDepartment, setHasDepartment] = useState<boolean>(false);
+    const [departureDepartment, setDepartureDepartment] = useState<string>([]);
     const [notification, setNotification] = useState<Record<string, string>>({
         title: '',
         body: '',
@@ -24,7 +25,10 @@ const NewPush = () => {
     const dispatch = useDispatch();
 
     const departments = useSelector(selectDepartmentState);
+    const usersDepartments = useSelector(selectUsersDepartments);
     const users = useSelector(selectAllUsers);
+
+    console.log("usersDepartments", usersDepartments);
 
     const formattedDepartments = departments.reduce((acc: { value: string, label: string }[], { id, name }: { id: string, name: string }) => {
         return [...acc, {
@@ -40,6 +44,15 @@ const NewPush = () => {
         }]
     }, []);
 
+    const formattedUsersDepartments = usersDepartments.reduce((acc: { value: string, label: string }[], { department }: { department: any }) => {
+        const { id, name } = department;
+
+        return [...acc, {
+            value: id,
+            label: name
+        }]
+    }, []);
+
     const handleSelectDepartments = (selected: string[]) => {
         setSelectedDepartments(selected);
     };
@@ -48,19 +61,25 @@ const NewPush = () => {
         setSelectedUsers(selected);
     }
 
+    const handleSelectDepartureDepartment = (selected: string | null) => {
+        if (selected) {
+            setDepartureDepartment(selected);
+        }
+    }
+
     const handleCheckDepartment = (e: React.ChangeEvent<HTMLInputElement>) => {
         setHasDepartment(e.target.checked);
     }
 
     const handleSendNotification = () => {
-        const toDepartmentRoles = selectedDepartments.reduce((acc: {departmentId: string, roles?: string[]}[], department) => {
+        const toDepartmentRoles = selectedDepartments.reduce((acc: { departmentId: string, roles?: string[] }[], department) => {
             return [...acc, {
                 departmentId: department,
                 roles: role === '' ? [] : new Array(role)
-              }];
+            }];
         }, [])
 
-        const toUserId = selectedUsers.reduce((acc: {userId: string}[], user) => {
+        const toUserId = selectedUsers.reduce((acc: { userId: string }[], user) => {
             return [...acc, {
                 userId: user,
             }]
@@ -76,13 +95,13 @@ const NewPush = () => {
             ]
         }
 
-        sendPushNotification(payload as SendNotification)
-        .then(response => {
-            console.log('response',response);
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        sendPushNotification(payload as SendNotification, departureDepartment)
+            .then(response => {
+                console.log('response', response);
+            })
+            .catch(error => {
+                console.error(error);
+            })
     }
 
     useEffect(() => {
@@ -106,8 +125,12 @@ const NewPush = () => {
                         checkIconPosition='left'
                     />
 
-                    <MultiSelect
+                    <Select
+                        onChange={handleSelectDepartureDepartment}
+                        data={formattedUsersDepartments}
                         label="Выберите деп-нт отправки"
+                        hidePickedOptions
+                        searchable
                     />
 
                     <MultiSelect
@@ -143,7 +166,7 @@ const NewPush = () => {
                         title={
                             <Input size='xs'
                                 onChange={(e) => {
-                                    setNotification({...notification, title: e.target.value})
+                                    setNotification({ ...notification, title: e.target.value })
                                 }}
                             />
                         }
@@ -153,7 +176,7 @@ const NewPush = () => {
                         <Textarea
                             size='xs'
                             onChange={(e) => {
-                                setNotification({...notification, body: e.target.value})
+                                setNotification({ ...notification, body: e.target.value })
                             }}
                         />
                     </Notification>

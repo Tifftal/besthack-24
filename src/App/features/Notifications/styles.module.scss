@@ -4,6 +4,7 @@
     animation: fadeIn 0.5s ease-out forwards, fadeOut 0.5s ease-in 5.5s forwards;
     opacity: 0;
     position: relative;
+    z-index: 1000;
 }
 
 @keyframes fadeIn {
@@ -63,4 +64,5 @@
     position: absolute;
     height: 100vh;
     background-color: transparent;
+    padding: 10px;
 }

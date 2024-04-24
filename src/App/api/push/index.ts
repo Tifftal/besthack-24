@@ -5,9 +5,9 @@ const ENDPOINTS = {
     send_notification: '/main/department/push',
 };
 
-export const sendPushNotification = async (payload: SendNotification) => {
+export const sendPushNotification = async (payload: SendNotification, departure: string) => {
     try {
-        const { data, status } = await apiInstance.post(ENDPOINTS.send_notification, {
+        const { data, status } = await apiInstance.post(`${ENDPOINTS.send_notification}?id=${departure}`, {
             ...payload
         })
 

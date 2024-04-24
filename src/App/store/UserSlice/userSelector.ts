@@ -10,3 +10,5 @@ export const selectUserState = (state: RootState) => state.user;
 export const selectUsername = (state: RootState) => selectUserState(state).username;
 
 export const selectAllUsers = (state: RootState) => selectUserState(state).users;
+
+export const selectUsersDepartments = (state: RootState) => selectUserState(state).departmentRoles;
