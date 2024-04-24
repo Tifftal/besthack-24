@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { test_one, test_two } from '../../api/AxiosBaseApi';
 import { useEffect, useState } from 'react';
 import { me } from '../../api/user/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserState } from '../../store/UserSlice/userSelector';
+import { setUser } from '../../store/UserSlice/UserSlice';
 
 export type UserRole = "ROLE_EMPLOYEE" | "ROLE_USER";
 
@@ -36,7 +39,11 @@ export type FullInfo = {
 
 const MainPage = () => {
 
-    const [user, setUser] = useState<FullInfo>(null); // [1]
+    // const [user, setUser] = useState<FullInfo>(null); // [1]
+    const dispatch = useDispatch();
+
+    const user = useSelector(selectUserState)
+
     const navigate = useNavigate();
     const logout = () => {
         localStorage.removeItem('atoken');
@@ -49,7 +56,8 @@ const MainPage = () => {
             navigate('/login');
         }
         me().then((res) => {
-            setUser(res);
+            // setUser(res);
+            dispatch(setUser(res))
             console.log(res);
         });
     }, []);
@@ -78,7 +86,7 @@ const MainPage = () => {
                         История
                     </Tabs.Tab>
                     <Tabs.Tab value="settings" leftSection={<IconSettings style={iconStyle} />}>
-                        Управление аккаунтами
+                        Управление
                     </Tabs.Tab>
                     <Tabs.Tab value="new-push" leftSection={<IconPlus style={iconStyle} />}>
                         Новое уведомление

@@ -1,3 +1,4 @@
+import { getFirebaseToken } from '../../config/firebase/firebaseConfig';
 import { apiInstance } from '../AxiosBaseApi';
 
 const ENDPOINTS = {
@@ -5,6 +6,7 @@ const ENDPOINTS = {
   register: '/auth/register',
   refresh: '/auth/refresh',
   me: '/main/auth/user/me',
+  push: '/main/auth/user/token',
 };
 
 export const login = async (username: string, password: string) => {
@@ -25,52 +27,66 @@ export const login = async (username: string, password: string) => {
     throw new Error('Conflict');
   }
 
-    return response.data;
+  return response.data;
 };
 
 export const register = async (username: string, password: string) => {
-  const response = await apiInstance.post(ENDPOINTS.register, {
+  const { data, status } = await apiInstance.post(ENDPOINTS.register, {
     username,
     password,
   });
 
-  if (response.status === 400) {
+  if (status === 400) {
     throw new Error('Bad request');
   }
 
-  if (response.status === 401) {  
+  if (status === 401) {
     throw new Error('Unauthorized');
   }
 
-  if (response.status === 409) {
+  if (status === 409) {
     throw new Error('Conflict');
   }
 
-    return response.data;
+  return data;
 };
 
 export const refresh = async (refresh: string) => {
-  const response = await apiInstance.post(ENDPOINTS.refresh, {
+  const { data, status } = await apiInstance.post(ENDPOINTS.refresh, {
     refresh,
   });
 
-  if (response.status === 400) {
+  if (status === 400) {
     throw new Error('Bad request');
   }
 
-  return response.data;
+  return data;
 };
 
 export const me = async () => {
-  const response = await apiInstance.get(ENDPOINTS.me);
+  const { data, status } = await apiInstance.get(ENDPOINTS.me);
 
-  if (response.status === 400) {
+  if (status === 400) {
     throw new Error('Bad request');
   }
 
-  if (response.status === 401) {
+  if (status === 401) {
     throw new Error('Unauthorized');
   }
 
-  return response.data;
+  return data;
+};
+
+export const generatePushToken = async () => {
+  try {
+    const firebaseToken = await getFirebaseToken();
+    if (firebaseToken) {
+      const { status } = await apiInstance.post(`${ENDPOINTS.push}?token=${firebaseToken}`);
+
+      return status;
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
 };

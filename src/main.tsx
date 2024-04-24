@@ -3,7 +3,7 @@ import App from './App';
 import './index.scss';
 import '@mantine/core/styles.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import store from './App/store.ts';
+import { store } from './App/store/store.ts';
 import { Provider } from 'react-redux';
 import { createTheme, MantineProvider, rem } from '@mantine/core';
 import NotificationWrapper from './App/features/Notifications/NotificationWrapper.tsx';

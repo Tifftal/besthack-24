@@ -5,12 +5,10 @@ import MainPage from './pages/MainPage'
 import ProfilePage from './pages/ProfilePage'
 import styles from './App.module.scss';
 
-
 function App() {
   return (
     <div className={styles.App}>
       <BrowserRouter>
-      
         <Routes>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/registration' element={<RegistrationPage />} />
