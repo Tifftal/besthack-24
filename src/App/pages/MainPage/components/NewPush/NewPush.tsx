@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './NewPush.module.scss';
 import { RolesEnum } from './types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectDepartmentState } from '../../../../store/DepartmentSlice/departmentSelector';
 import { MultiSelect } from '@mantine/core';
 import { UserState } from '../../../../store/UserSlice/UserSlice';
@@ -10,9 +10,11 @@ import { getUsers } from '../../../../api/user/index';
 const NewPush = () => {
     const [role, setRole] = useState<RolesEnum | null>(null);
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
-    const [users, setUsers] = useState<{label: string, value: string}[]>([]);
+
+    const dispatch = useDispatch();
 
     const departments = useSelector(selectDepartmentState)
+    
 
     const formattedDepartments = departments.reduce((acc: Record<string, string>[], { id, name }: { id: string, name: string }) => {
         return [...acc, {
@@ -26,7 +28,7 @@ const NewPush = () => {
     };
 
     const handleSelectUsers = (selected: string[]) => {
-        
+
     }
 
     useEffect(() => {
@@ -39,12 +41,12 @@ const NewPush = () => {
                     }]
                 }, []);
 
-                setUsers(formattedUsers);
+                dispatch(formattedUsers);
             })
             .catch(err => console.error(err));
     }, []);
 
-    console.log(users);
+    // console.log(users);
 
     return (
         <div className={styles['new-push']}>
@@ -62,7 +64,7 @@ const NewPush = () => {
                         searchable
                         hidePickedOptions
                         label={"Выберите пользователя(ей)"}
-                        data={users}
+                        // data={users}
                         onChange={handleSelectUsers}
                     />
                 </div>
