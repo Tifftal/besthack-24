@@ -1,9 +1,11 @@
 import { ActionFromReducersMapObject, configureStore } from '@reduxjs/toolkit';
 import { userReducer, userSlice } from './UserSlice/UserSlice';
 import { createReduxHookFactory } from './createReduxHookFactory';
+import { departmentSlice, departmentReducer } from './DepartmentSlice/DepatmentSlice';
 
 const initialReducers = {
   [userSlice.name]: userReducer,
+  [departmentSlice.name]: departmentReducer,
 }
 
 export const store = configureStore({
