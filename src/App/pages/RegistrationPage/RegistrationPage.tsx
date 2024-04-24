@@ -24,7 +24,13 @@ const RegistrationPage = () => {
 
   const handleRegistration = async () => {
     try {
-      const response = await register(form.values.username, form.values.password);
+      const response = await register(
+        form.values.username,
+        form.values.password,
+        form.values.name,
+        form.values.middleName,
+        form.values.surname
+      );
 
       if (response.jwtTokens) {
         localStorage.setItem('atoken', response.jwtTokens.access);
@@ -46,15 +52,20 @@ const RegistrationPage = () => {
     }
   };
 
-
   const form = useForm({
     initialValues: {
       username: '',
       password: '',
+      name: '',
+      surname: '',
+      middleName: '',
     },
 
     validate: {
       username: (value: string) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      name: (value: string) => (value.length > 0 ? null : 'Введите имя'),
+      surname: (value: string) => (value.length > 0 ? null : 'Введите фамилию'),
+      middleName: (value: string) => (value.length > 0 ? null : 'Введите отчество'),
       password: (value: string) => (value.length > 6 ? null : 'Пароль должен быть длиннее 6 символов'),
     },
   });
@@ -64,10 +75,13 @@ const RegistrationPage = () => {
       <form onSubmit={form.onSubmit(handleRegistration)} className={styles['reg-page__form']}>
         <TextInput
           mt="sm"
-          label="Имя пользователя"
-          placeholder="Имя пользователя"
+          label="Почта"
+          placeholder="Почта"
           {...form.getInputProps('username')}
         />
+        <TextInput mt="sm" label="Фамилия" placeholder="Фамилия" {...form.getInputProps('surname')} />
+        <TextInput mt="sm" label="Имя" placeholder="Имя" {...form.getInputProps('name')} />
+        <TextInput mt="sm" label="Отчество" placeholder="Отчество" {...form.getInputProps('middleName')} />
         <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
         <div className={styles['reg-page__form-btn']}>
           <Button type="submit" mt="sm">
