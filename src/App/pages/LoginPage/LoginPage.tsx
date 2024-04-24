@@ -60,7 +60,6 @@ const LoginPage = () => {
         })
         .then((res) => {
           console.log(res.data);
-          //   setProfile(res.data);
           store.dispatch({ type: 'SET_USER', payload: res.data });
           console.log(store.getState());
           // sent the data to the backend
