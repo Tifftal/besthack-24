@@ -5,11 +5,13 @@ import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // import YaOAuthButton from './components/yaButton';
-import store from '../../store';
+import { setUser as setUserToStore } from '../../store/UserSlice/UserSlice';
+import { store } from '../../store/store';
 import { login } from '../../api/user/index';
 import { IconBrandGoogleFilled } from '@tabler/icons-react';
 
 import styles from './LoginPage.module.scss';
+import { useDispatch } from 'react-redux';
 
 const LoginPage = () => {
 //   const handlYaSuccess = (data) => {
@@ -21,6 +23,7 @@ const LoginPage = () => {
 //     console.log('Что-то пошло не так: ', error);
 //     // Здесь можно обработать ошибку, если нужно
 //   };
+  const dispatch = useDispatch();
 
   const [user, setUser] = useState([]);
 //   const [profile, setProfile] = useState([]);
@@ -33,7 +36,8 @@ const LoginPage = () => {
           localStorage.setItem('atoken', res.jwtTokens.access);
           localStorage.setItem('rtoken', res.jwtTokens.refresh);
         }
-        store.dispatch({ type: 'SET_USER', payload: res.data });
+        // store.dispatch({ type: 'SET_USER', payload: res.data });
+        dispatch(setUserToStore(res.data))
         navigate('/')
       })
       .catch((err) => console.log(err));
