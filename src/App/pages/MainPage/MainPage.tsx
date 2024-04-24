@@ -14,11 +14,17 @@ import { setUser } from '../../store/UserSlice/UserSlice';
 
 export type UserRole = "ROLE_EMPLOYEE" | "ROLE_USER";
 
+export type DepartmentReciever = {
+    id: string,
+    name: string,
+    amountOfPeople: number,
+}
+
 export type Department = {
     id: string,
     name: string,
     amountOfPeople: number,
-    canSendTo: string[],
+    canSendTo: DepartmentReciever[],
 }
 
 export type DepartmentRole = {
