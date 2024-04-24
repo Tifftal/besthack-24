@@ -69,6 +69,7 @@ const DepartmentsLaw = () => {
             updateCanSendToDepartment(id, department)
                 .then(response => {
                     dispatch(updateDepartments(response.data))
+                    setHasChanged(false)
                 })
                 .catch(error => {
                     console.log(error)
