@@ -1,7 +1,7 @@
-import { TextInput, Button, PasswordInput } from '@mantine/core';
+import { TextInput, Button, PasswordInput, Text } from '@mantine/core';
 import styles from './RegistrationPage.module.scss';
 import { useForm } from '@mantine/form';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import store from '../../store';
 import { register } from '../../api/user/index';
 
@@ -41,7 +41,6 @@ const RegistrationPage = () => {
       password: '',
     },
 
-
     validate: {
       username: (value: string) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
       password: (value: string) => (value.length > 6 ? null : 'Пароль должен быть длиннее 6 символов'),
@@ -49,16 +48,25 @@ const RegistrationPage = () => {
   });
 
   return (
-    <div className={styles['red-page']}>
-      <div className={styles['red-page__form']}>
-        <form onSubmit={form.onSubmit(handleRegistration)} style={{ width: '100%' }}>
-          <TextInput mt="sm" label="Email" placeholder="Email" {...form.getInputProps('username')} />
-          <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
+    <div className={styles['reg-page']}>
+      <form onSubmit={form.onSubmit(handleRegistration)} className={styles['reg-page__form']}>
+        <TextInput
+          mt="sm"
+          label="Имя пользователя"
+          placeholder="Имя пользователя"
+          {...form.getInputProps('username')}
+        />
+        <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
+        <div className={styles['reg-page__form-btn']}>
           <Button type="submit" mt="sm">
-            Submit
+            Зарегистрироваться
           </Button>
-        </form>
-      </div>
+        </div>
+        <div className={styles['reg-page__form-login']}>
+          <Text>Уже зарегистрированы?</Text>
+          <NavLink to="/login">Войти</NavLink>
+        </div>
+      </form>
     </div>
   );
 };
