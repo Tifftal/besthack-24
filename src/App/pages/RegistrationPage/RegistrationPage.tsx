@@ -3,7 +3,7 @@ import styles from './RegistrationPage.module.scss';
 import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
 import store from '../../store';
-import { register } from '../../api/user/index';
+import { generatePushToken, register } from '../../api/user/index';
 
 export type RegResponse = {
   id: string;
@@ -19,21 +19,28 @@ export type RegResponse = {
 const RegistrationPage = () => {
   const navigate = useNavigate();
 
-  const handleRegistration = () => {
-    register(form.values.username, form.values.password)
-      .then((response) => {
-        if (response.jwtTokens) {
-          localStorage.setItem('atoken', response.jwtTokens.access);
-          localStorage.setItem('rtoken', response.jwtTokens.refresh);
-        }
-        store.dispatch({ type: 'SET_USER', payload: response });
-        store.getState();
+  const handleRegistration = async () => {
+    try {
+      const response = await register(form.values.username, form.values.password);
+
+      if (response.jwtTokens) {
+        localStorage.setItem('atoken', response.jwtTokens.access);
+        localStorage.setItem('rtoken', response.jwtTokens.refresh);
+      }
+
+      store.dispatch({ type: 'SET_USER', payload: response });
+
+      const status = await generatePushToken();
+
+      if (status === 200) {
+        console.log(status);
         navigate('/');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
 
   const form = useForm({
     initialValues: {
