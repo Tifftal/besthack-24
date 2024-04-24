@@ -63,24 +63,10 @@ const MainPage = () => {
         });
     }, []);
 
-    const handleTest401 = () => {
-        test_one().then((res) => {
-            console.log(res);
-        });
-    }
-
-    const handleTest403 = () => {
-        test_two().then((res) => {
-            console.log(res);
-        });
-    }
-
     const iconStyle = { width: rem(15), height: rem(15) };
 
     return (
         <div className={styles['main-page']}>
-            <Button onClick={handleTest401}>Test 401</Button>
-            <Button onClick={handleTest403}>Test 403</Button>
             <Tabs defaultValue="history">
                 <Tabs.List>
                     <Tabs.Tab value="history" leftSection={<IconHistory style={iconStyle} />}>

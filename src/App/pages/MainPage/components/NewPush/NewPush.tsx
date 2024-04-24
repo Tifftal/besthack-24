@@ -8,9 +8,11 @@ import { setUsers } from '../../../../store/UserSlice/UserSlice';
 import { getUsers } from '../../../../api/user/index';
 import { selectAllUsers } from '../../../../store/UserSlice/userSelector';
 import { getNotificationColor } from '../../../../helpers/getNotificationColor';
+import { sendPushNotification } from '../../../../api/push/index';
+import { SendNotification } from '../../../../api/push/types';
 
 const NewPush = () => {
-    const [role, setRole] = useState<RolesEnum | null>(null);
+    const [role, setRole] = useState<RolesEnum | string>('');
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [hasDepartment, setHasDepartment] = useState<boolean>(false);
@@ -51,16 +53,47 @@ const NewPush = () => {
     }
 
     const handleSendNotification = () => {
-        
+        const toDepartmentRoles = selectedDepartments.reduce((acc: {departmentId: string, roles?: string[]}[], department) => {
+            return [...acc, {
+                departmentId: department,
+                roles: role === '' ? [] : new Array(role)
+              }];
+        }, [])
+
+        const toUserId = selectedUsers.reduce((acc: {userId: string}[], user) => {
+            return [...acc, {
+                userId: user,
+            }]
+        }, []);
+
+        const payload = {
+            ...notification,
+            toDepartmentRoles: [
+                ...toDepartmentRoles
+            ],
+            toUserId: [
+                ...toUserId
+            ]
+        }
+
+        sendPushNotification(payload as SendNotification)
+        .then(response => {
+            console.log('response',response);
+        })
+        .catch(error => {
+            console.error(error);
+        })
     }
 
     useEffect(() => {
-        getUsers()
+        getUsers({})
             .then(({ content }) => {
                 dispatch(setUsers(content));
             })
             .catch(err => console.error(err));
     }, []);
+
+    console.log('users', users)
 
     return (
         <div className={styles['new-push']}>
@@ -71,7 +104,10 @@ const NewPush = () => {
                         data={RolesToSelect}
                         defaultValue=''
                         checkIconPosition='left'
+                    />
 
+                    <MultiSelect
+                        label="Выберите деп-нт отправки"
                     />
 
                     <MultiSelect
