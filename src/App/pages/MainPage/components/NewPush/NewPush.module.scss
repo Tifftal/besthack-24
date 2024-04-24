@@ -1,24 +1,37 @@
 .new-push {
     display: flex;
     flex-direction: column;
-    height: 100px;
     width: 100%;
-    background-color: red;
-    padding: 20px 0;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: var(--mantine-radius-default);
+    border: 0.5px solid #dee2e6;
 }
 
 .push-wrapper {
     display: flex;
     flex-direction: row;
     width: 100%;
-    background-color: dodgerblue;
 }
 
 .push-controller {
     display: flex;
     flex-direction: column;
-    height: 100px;
     max-height: 400px;
-    width: 40%;
-    background-color: green;
+    width: 30%;
+    gap: 10px;
+}
+
+.push-constructor {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.push-notification {
+    max-width: 500px;
+    width: 100%;
+    
 }

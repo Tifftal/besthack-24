@@ -5,7 +5,9 @@ import { MessagePayload, onMessage } from "firebase/messaging";
 import { Notification } from "@mantine/core";
 
 import styles from "./styles.module.scss";
+import { getNotificationColor } from "../../helpers/getNotificationColor";
 
+// eslint-disable-next-line react/prop-types
 const NotificationWrapper: React.FC<Props> = ({ children }) => {
     const [notificationPayload, setNotificationPayload] = useState<NotificationPayloadProps[]>([]);
 
@@ -58,6 +60,7 @@ const NotificationWrapper: React.FC<Props> = ({ children }) => {
                                 );
                             }}
                             title={notification?.data?.notification?.title || ""}
+                            {...getNotificationColor(notification?.data?.notification?.title)}
                         >
                             {notification?.data?.notification?.body || ""}
                             <div className={styles["push-progress-bar"]}>
