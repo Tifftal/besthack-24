@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createReduxHookFactory } from "../createReduxHookFactory";
 import { SliceActions } from "../sliceActions";
@@ -17,6 +17,7 @@ export const departmentSlice = createSlice({
     initialState,
     reducers: {
         setDepartments: (state, action: PayloadAction<DepartmentState[]>) => {
+            console.log("dep", action.payload);
             state = action.payload;
             return state
         },

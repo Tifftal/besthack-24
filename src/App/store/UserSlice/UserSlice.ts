@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createReduxHookFactory } from "../createReduxHookFactory";
 import { SliceActions } from "../sliceActions";
@@ -8,13 +8,15 @@ export type JwtTokens = {
     refresh: string;
 }
 
-export type UserState = {
+export type User = {
     id: string;
     mail: string;
     username: string;
     status: string;
     jwtTokens: JwtTokens;
 };
+
+type UserState = User & { users: User[] };
 
 const initialState: UserState = {
     id: '',
@@ -25,6 +27,7 @@ const initialState: UserState = {
         access: '',
         refresh: '',
     },
+    users: [],
 };
 
 export const userSlice = createSlice({
@@ -39,6 +42,9 @@ export const userSlice = createSlice({
         },
         logout: (state) => {
             Object.assign(state, initialState);
+        },
+        setUsers: (state, action: PayloadAction<UserState[]>) => {
+            state.users = action.payload;
         },
     }
 })

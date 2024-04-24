@@ -1,0 +1,24 @@
+.new-push {
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    width: 100%;
+    background-color: red;
+    padding: 20px 0;
+}
+
+.push-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: dodgerblue;
+}
+
+.push-controller {
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    max-height: 400px;
+    width: 40%;
+    background-color: green;
+}

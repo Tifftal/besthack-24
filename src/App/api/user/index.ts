@@ -1,6 +1,8 @@
 import { getFirebaseToken } from '../../config/firebase/firebaseConfig';
 import { apiInstance } from '../AxiosBaseApi';
 
+const USERS_LIMIT = 1000000;
+
 const ENDPOINTS = {
   login: '/auth/login',
   register: '/auth/register',
@@ -90,3 +92,13 @@ export const generatePushToken = async () => {
     throw error;
   }
 };
+
+export const getUsers = async () => {
+  try {
+    const { data, status } = await apiInstance.get(`/main/user?page=0&size=${USERS_LIMIT}&sort=ASC`);
+
+    return status === 200 ? data : [];
+  } catch(err) {
+    console.error("Error occured while fetching users: ", err);
+  }
+}
