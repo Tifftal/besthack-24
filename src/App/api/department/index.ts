@@ -37,7 +37,6 @@ export const getDepartmentUsers = async (id: string, userId: string) => {
 }
 
 export const updateCanSendToDepartment = async (id: string, departments: string[]) => {
-    console.log(id, departments)
     const response = await apiInstance.put(ENDPOINTS.department + `/${id}/can-send-to`, departments);
 
     return response;
