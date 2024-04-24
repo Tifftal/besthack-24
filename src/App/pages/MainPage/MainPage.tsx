@@ -35,6 +35,7 @@ export type FullInfo = {
     username: string,
     createDate: string,
     departmentRoles: DepartmentRole[],
+    globalRole: string
 } | null;
 
 const MainPage = () => {
@@ -97,7 +98,7 @@ const MainPage = () => {
                         direction="row"
                     >
                         <Text size="md" fw={400} mr={8}>Вы вошли как</Text>
-                        <Text mr={30} fw={600} c='blue'>{user?.username}</Text>
+                        <Text mr={30} fw={600} c='blue'>{user?.surname} {user?.name} {user?.middleName} </Text>
                         <Button variant='outline' className={styles['main-page-logout-btn']} onClick={logout}>Выйти</Button>
                     </Flex>
                 </Tabs.List>

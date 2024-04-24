@@ -1,3 +1,4 @@
+import { UserInitials } from 'App/pages/ProfilePage/ProfilePage';
 import { getFirebaseToken } from '../../config/firebase/firebaseConfig';
 import { apiInstance } from '../AxiosBaseApi';
 
@@ -8,6 +9,7 @@ const ENDPOINTS = {
   register: '/auth/register',
   refresh: '/auth/refresh',
   me: '/main/auth/user/me',
+  edit: '/main/auth/user',
   push: '/main/auth/user/token',
 };
 
@@ -92,6 +94,27 @@ export const generatePushToken = async () => {
     throw error;
   }
 };
+
+export const updateUser = async (user: UserInitials) => {
+  const {data, status} = await apiInstance.put(ENDPOINTS.edit, {
+    ...user
+  })
+
+  if (status === 400) {
+    throw new Error('Bad request');
+  }
+
+  if (status === 401) {
+    throw new Error('Unauthorized');
+  }
+
+  if (status === 409) {
+    throw new Error('Conflict');
+  }
+
+  return data;
+
+}
 
 export const getUsers = async () => {
   try {
