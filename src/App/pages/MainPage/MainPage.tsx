@@ -5,14 +5,73 @@ import History from './components/History';
 import Control from './components/Control';
 import NewPush from './components/NewPush';
 import { useNavigate } from 'react-router-dom';
+import { test_one, test_two } from '../../api/AxiosBaseApi';
+import { useEffect, useState } from 'react';
+import { me } from '../../api/user/index';
+
+export type UserRole = "ROLE_EMPLOYEE" | "ROLE_USER";
+
+export type Department = {
+    id: string,
+    name: string,
+    amountOfPeople: number,
+    canSendTo: string[],
+}
+
+export type DepartmentRole = {
+    user: string,
+    department: Department,
+    userRole: UserRole[],
+}
+
+export type FullInfo = {
+    id: string,
+    name: string,
+    middleName: string,
+    surname: string,
+    username: string,
+    createDate: string,
+    departmentRoles: DepartmentRole[],
+} | null;
 
 const MainPage = () => {
+
+    const [user, setUser] = useState<FullInfo>(null); // [1]
     const navigate = useNavigate();
+    const logout = () => {
+        localStorage.removeItem('atoken');
+        localStorage.removeItem('rtoken');
+        navigate('/login');
+    };
+
+    useEffect(() => {
+        if (!localStorage.getItem('atoken')) {
+            navigate('/login');
+        }
+        me().then((res) => {
+            setUser(res);
+            console.log(res);
+        });
+    }, []);
+
+    const handleTest401 = () => {
+        test_one().then((res) => {
+            console.log(res);
+        });
+    }
+
+    const handleTest403 = () => {
+        test_two().then((res) => {
+            console.log(res);
+        });
+    }
 
     const iconStyle = { width: rem(15), height: rem(15) };
 
     return (
         <div className={styles['main-page']}>
+            <Button onClick={handleTest401}>Test 401</Button>
+            <Button onClick={handleTest403}>Test 403</Button>
             <Tabs defaultValue="history">
                 <Tabs.List>
                     <Tabs.Tab value="history" leftSection={<IconHistory style={iconStyle} />}>
@@ -30,8 +89,8 @@ const MainPage = () => {
                         direction="row"
                     >
                         <Text size="md" fw={400} mr={8}>Вы вошли как</Text>
-                        <Text mr={30} fw={600} c='blue'>Варвара</Text>
-                        <Button variant='outline' className={styles['main-page-logout-btn']} onClick={() => navigate('/login')}>Выйти</Button>
+                        <Text mr={30} fw={600} c='blue'>{user?.username}</Text>
+                        <Button variant='outline' className={styles['main-page-logout-btn']} onClick={logout}>Выйти</Button>
                     </Flex>
                 </Tabs.List>
 

@@ -20,11 +20,13 @@ const RegistrationPage = () => {
   const navigate = useNavigate();
 
   const handleRegistration = () => {
-    console.log(form.values);
     register(form.values.username, form.values.password)
       .then((response) => {
-        console.log('ura');
-        store.dispatch({ type: 'SET_USER', payload: response.data });
+        if (response.jwtTokens) {
+          localStorage.setItem('atoken', response.jwtTokens.access);
+          localStorage.setItem('rtoken', response.jwtTokens.refresh);
+        }
+        store.dispatch({ type: 'SET_USER', payload: response });
         store.getState();
         navigate('/');
       })
@@ -39,9 +41,6 @@ const RegistrationPage = () => {
       password: '',
     },
 
-    onValuesChange: (values) => {
-      console.log(values);
-    },
 
     validate: {
       username: (value: string) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
