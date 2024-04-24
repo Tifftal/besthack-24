@@ -23,7 +23,21 @@ const LoginPage = () => {
     const [user, setUser] = useState([]);
     const [profile, setProfile] = useState([]);
 
-    const login = useGoogleLogin({
+    const handleLogin = () => {
+        login(form.values.email, form.values.password)
+            .then((res) => {
+                console.log(res);
+                if (res.jwtTokens) {
+                    localStorage.setItem('atoken', res.jwtTokens.access);
+                    localStorage.setItem('rtoken', res.jwtTokens.refresh);
+                }
+                store.dispatch({ type: 'SET_USER', payload: res.data });
+                navigate('/')
+            })
+            .catch((err) => console.log(err));
+    };
+
+    const loginG = useGoogleLogin({
         onSuccess: (codeResponse) => setUser(codeResponse),
         onError: (error) => console.log('Login Failed:', error),
     });
@@ -64,7 +78,6 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
     const form = useForm({
-        mode: 'uncontrolled',
         validateInputOnBlur: true,
         initialValues: { name: '', email: '', age: 0 },
 
