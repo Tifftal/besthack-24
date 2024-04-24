@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createReduxHookFactory } from "../createReduxHookFactory";
 import { SliceActions } from "../sliceActions";
-
+import { DepartmentRole, FullInfo } from "../../pages/MainPage/MainPage";
 export type JwtTokens = {
     access: string;
     refresh: string;
@@ -10,24 +10,30 @@ export type JwtTokens = {
 
 export type User = {
     id: string;
-    mail: string;
+    name: string;
+    surname: string;
+    middleName: string;
+    globalRole: string;
     username: string;
-    status: string;
     jwtTokens: JwtTokens;
 };
 
-type UserState = User & { users: User[] };
+type UserState = FullInfo & User & { users: User[]; createDate: string; departmentRoles: DepartmentRole[] };
 
 const initialState: UserState = {
     id: '',
-    mail: '',
     username: '',
-    status: '',
+    globalRole: '',
+    middleName: '',
+    surname: '',
+    name: '',
     jwtTokens: {
         access: '',
         refresh: '',
     },
     users: [],
+    createDate: '',
+    departmentRoles: [],
 };
 
 export const userSlice = createSlice({

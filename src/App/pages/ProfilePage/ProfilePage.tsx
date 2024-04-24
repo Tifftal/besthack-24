@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
-import { FullInfo } from '../MainPage/MainPage';
+import { useEffect } from 'react';
 import { me } from '../../api/user/index';
 import styles from './ProfilePage.module.scss';
-import { Group, Avatar, Text, Modal, Button, TextInput, Badge } from '@mantine/core';
+import { Group, Avatar, Text, Modal, Button, TextInput } from '@mantine/core';
 import { IconAt, IconEdit, IconHeart } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { updateUser } from '../../api/user/index';
 import { NavLink } from 'react-router-dom';
 import DepartmentBadge from './components/Department/DepartmentBadge';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserState } from '../../store/UserSlice/userSelector';
+import { setUser } from '../../store/UserSlice/UserSlice';
 
 const convertDate = (date: string) => {
   const dateObj = new Date(date);
@@ -22,12 +24,15 @@ export type UserInitials = {
 };
 
 const ProfilePage = () => {
-  const [user, setUser] = useState<FullInfo>(null);
+  // const [user, setUser] = useState<FullInfo>(null);
+  const dispatch = useDispatch();
+
+  const user = useSelector(selectUserState);
   const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
     me().then((res) => {
-      setUser(res);
+      dispatch(setUser(res));
     });
   }, []);
 
@@ -36,7 +41,7 @@ const ProfilePage = () => {
       await updateUser(values);
       close();
       me().then((res) => {
-        setUser(res);
+        dispatch(setUser(res));
       });
     } catch (error) {
       console.error(error);
