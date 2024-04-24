@@ -6,6 +6,18 @@
         flex-direction: row;
         gap: 20px;
 
+        &-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #f8f9fa;
+            border-radius: calc(0.25rem * 1);
+            padding: 10px;
+            max-height: 400px;
+            overflow: auto;
+            margin-top: 10px;
+        }
+
         &-departments {
             width: 40%;
             display: flex;
@@ -17,7 +29,7 @@
             max-height: 400px;
             overflow: auto;
 
-            button {
+            &-btn {
                 background: none;
                 border: none;
                 transition: .2s;
@@ -27,7 +39,7 @@
                 font-weight: 500;
             }
 
-            button:hover {
+            &-btn:hover {
                 color: #ac5b39;
             }
         }

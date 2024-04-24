@@ -96,7 +96,7 @@ export const generatePushToken = async () => {
 };
 
 export const updateUser = async (user: UserInitials) => {
-  const {data, status} = await apiInstance.put(ENDPOINTS.edit, {
+  const { data, status } = await apiInstance.put(ENDPOINTS.edit, {
     ...user
   })
 
@@ -116,12 +116,24 @@ export const updateUser = async (user: UserInitials) => {
 
 }
 
-export const getUsers = async () => {
+export const getUsers = async ({ hasDepartment, departmentId, role }: { hasDepartment?: boolean, departmentId?: string, role?: string }) => {
   try {
-    const { data, status } = await apiInstance.get(`/main/user?page=0&size=${USERS_LIMIT}&sort=ASC`);
+    let URL = `/main/user?page=0&size=${USERS_LIMIT}&sort=ASC`
+    if (hasDepartment !== undefined) {
+      URL += `&hasDepartment=${hasDepartment}`
+    }
+    if (departmentId !== undefined) {
+      URL += `&departmentId=${departmentId}`
+    }
+    if (role !== undefined) {
+      URL += `&role=${role}`
+    }
+
+    const { data, status } = await apiInstance.get(URL);
 
     return status === 200 ? data : [];
-  } catch(err) {
+  } catch (err) {
     console.error("Error occured while fetching users: ", err);
   }
 }
+

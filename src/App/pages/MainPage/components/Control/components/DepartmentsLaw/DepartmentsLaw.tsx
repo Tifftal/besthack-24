@@ -1,5 +1,5 @@
-import { ActionIcon, Button, Input, InputBase, MultiSelect, Pill } from '@mantine/core';
-import { IconCheckbox, IconEdit } from '@tabler/icons-react';
+import { ActionIcon, Button, Input, InputBase, Modal, MultiSelect, Pill } from '@mantine/core';
+import { IconCheckbox, IconEdit, IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDepartmentState } from 'App/store/DepartmentSlice/departmentSelector';
@@ -8,6 +8,8 @@ import { setDepartments, updateDepartments } from 'App/store/DepartmentSlice/Dep
 
 import classes from './DepartmentsLaw.module.css';
 import styles from './DepartmentLaw.module.scss';
+import { useDisclosure } from '@mantine/hooks';
+import { getUsers } from 'App/api/user/index';
 
 const DepartmentsLaw = () => {
     const [department, setDepartment] = useState<Department>();
@@ -16,7 +18,14 @@ const DepartmentsLaw = () => {
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [hasChanged, setHasChanged] = useState(false);
     const [users, setUsers] = useState([]);
+    const [allUsers, setAllUsers] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [searchUser, setSearchUser] = useState('');
+    const [addedRole, setAddedRole] = useState('ROLE_USER')
+
+    const [opened, { open, close }] = useDisclosure(false);
 
     const dispatch = useDispatch();
     const departments = useSelector(selectDepartmentState);
@@ -45,6 +54,15 @@ const DepartmentsLaw = () => {
         setSearchTerm(event.target.value);
     };
 
+    const handleSearchUser = (event) => {
+        setSearchUser(event.target.value);
+    };
+
+    const handleOpenModal = (role: string) => {
+        open();
+        setAddedRole(role)
+    }
+
     const GetDepartmentById = (id: string) => {
         console.log(id)
         getDepartmentById(id)
@@ -56,10 +74,34 @@ const DepartmentsLaw = () => {
             .catch(error => {
                 console.log(error)
             })
-        getDepartmentUsers(id)
+        getUsers({
+            hasDepartment: false
+        })
             .then(response => {
-                console.log(response.data.content)
-                setUsers(response.data.content)
+                setAllUsers(response.content)
+                console.log(response.content)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        getUsers({
+            departmentId: id,
+            role: "ROLE_USER"
+        })
+            .then(response => {
+                setUsers(response.content)
+                console.log(response.content)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        getUsers({
+            departmentId: id,
+            role: "ROLE_EMPLOYEE"
+        })
+            .then(response => {
+                setEmployees(response.content)
+                console.log(response.content)
             })
             .catch(error => {
                 console.log(error)
@@ -92,8 +134,51 @@ const DepartmentsLaw = () => {
         }
     }
 
+    const handleRemoveUser = (userId) => {
+        setSelectedUsers((prevSelectedUsers) =>
+            prevSelectedUsers.filter((user) => user.id !== userId)
+        );
+    };
+
     return (
         <div className={styles['control-law']}>
+            <Modal opened={opened} onClose={close} title="Добавление в отдел" centered>
+                <Pill.Group>
+                    {
+                        selectedUsers.length !== 0 ?
+                            selectedUsers.map(user =>
+                                <Pill
+                                    styles={{ root: { marginBottom: 20 } }}
+                                    withRemoveButton
+                                    onRemove={() => handleRemoveUser(user.id)}
+                                >
+                                    {user.username}
+                                </Pill>
+                            )
+                            : null
+                    }
+                </Pill.Group>
+                <Input placeholder="Поиск" value={searchUser} onChange={handleSearchUser} />
+                <div className={styles['control-law-modal']}>
+                    {allUsers.map((item) => {
+                        if (item.username.toLowerCase().includes(searchUser.toLowerCase())) {
+                            if (item.name !== '' && !selectedUsers.find(user => user.id === item.id)) {
+                                return (
+                                    <button
+                                        className={styles['control-law-departments-btn']}
+                                        key={item.id}
+                                        onClick={() => setSelectedUsers(state => [...state, item])}
+                                    >
+                                        {item.username}
+                                    </button>
+                                );
+                            }
+                        } else {
+                            return null;
+                        }
+                    })}
+                </div>
+            </Modal>
             <div className={styles['control-law-departments']}>
                 <Input placeholder="Поиск" value={searchTerm} onChange={handleSearch} />
                 {departments.map((item) => {
@@ -101,6 +186,7 @@ const DepartmentsLaw = () => {
                         return (
                             item.name === '' ? null : (
                                 <button
+                                    className={styles['control-law-departments-btn']}
                                     key={item.id}
                                     onClick={() => GetDepartmentById(item.id)}
                                     style={{
@@ -171,13 +257,49 @@ const DepartmentsLaw = () => {
                 >
                     Сохранить
                 </Button>
+
                 <InputBase
                     component="div"
-                    label="Сотрудники/пользователи отдела"
-                    multiline>
+                    label="Сотрудники отдела"
+                    multiline
+                    rightSectionPointerEvents="all"
+                    rightSection={
+                        <ActionIcon
+                            variant="light"
+                            color='green'
+                            onClick={() => handleOpenModal("ROLE_EMPLOYEE")}
+                        >
+                            <IconPlus style={{ width: '70%', height: '70%' }} stroke={1.8} />
+                        </ActionIcon>
+
+                    }
+                >
                     <Pill.Group>
                         {
-                            users.map(user => <Pill>test</Pill>)
+                            employees.length !== 0 ? employees.map(user => <Pill>{user.username}</Pill>) : "В этом отделе нет сотрудников"
+                        }
+                    </Pill.Group>
+                </InputBase>
+
+                <InputBase
+                    component="div"
+                    label="Пользователи отдела"
+                    multiline
+                    rightSectionPointerEvents="all"
+                    rightSection={
+                        <ActionIcon
+                            variant="light"
+                            color='green'
+                            onClick={() => handleOpenModal("ROLE_USER")}
+                        >
+                            <IconPlus style={{ width: '70%', height: '70%' }} stroke={1.8} />
+                        </ActionIcon>
+
+                    }
+                >
+                    <Pill.Group>
+                        {
+                            users.length !== 0 ? users.map(user => <Pill>{user.username}</Pill>) : "В этом отделе нет пользователей"
                         }
                     </Pill.Group>
                 </InputBase>

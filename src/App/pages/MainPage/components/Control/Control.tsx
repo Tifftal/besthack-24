@@ -21,12 +21,6 @@ const Control = () => {
                         <DepartmentsLaw />
                     </Accordion.Panel>
                 </Accordion.Item>
-                <Accordion.Item key='law_user' value='law_user'>
-                    <Accordion.Control>Права пользователей</Accordion.Control>
-                    <Accordion.Panel>
-
-                    </Accordion.Panel>
-                </Accordion.Item>
             </Accordion>
         </div>
     )
