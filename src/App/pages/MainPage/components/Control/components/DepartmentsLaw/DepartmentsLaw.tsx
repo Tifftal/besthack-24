@@ -162,11 +162,9 @@ const DepartmentsLaw = () => {
         if (remove_role === 'ROLE_EMPLOYEE') {
             finalRole.push('ROLE_USER')
         }
-        // console.log(finalRole)
         bindUserToDepartment(department_id, user_id, finalRole)
             .then(response => {
                 GetDepartmentById(department_id)
-                // console.log(response)
             })
             .catch(error => {
                 console.log(error)
@@ -202,7 +200,7 @@ const DepartmentsLaw = () => {
                         <Button
                             styles={{ root: { marginBottom: 10 } }}
                             fullWidth
-                            onClick={() => AddUsersToDepartment(department.id, selectedUsers, addedRole)}
+                            onClick={() => department && AddUsersToDepartment(department.id, selectedUsers, addedRole)}
                         >
                             Добавить
                         </Button> :
@@ -217,7 +215,7 @@ const DepartmentsLaw = () => {
                             item.surname.toLowerCase().includes(searchUser.toLowerCase()) ||
                             item.middleName.toLowerCase().includes(searchUser.toLowerCase())
                         )) {
-                            if (item.name !== '' && !selectedUsers.find(user => user.id === item.id)) {
+                            if (item.name !== '' && !selectedUsers.find(user => user && user.id === item.id)) {
                                 return (
                                     <button
                                         className={styles['control-law-modal-btn']}
