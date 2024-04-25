@@ -23,7 +23,7 @@ const Departments = () => {
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 20 }}>
-      <GraphComponent changeDepartment={setDepartment} />
+      <GraphComponent departments={departments} changeDepartment={setDepartment} />
       <Group m="sm">
         <Table miw={300}>
           <Table.Thead>

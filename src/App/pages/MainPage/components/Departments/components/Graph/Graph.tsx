@@ -90,10 +90,11 @@ function randomColor() {
 }
 
 export type GraphComponentProps = {
+  departments: Department[];
   changeDepartment: (department: string) => void;
 };
 
-const GraphComponent: React.FC<GraphComponentProps> = ({ changeDepartment }) => {
+const GraphComponent: React.FC<GraphComponentProps> = ({ departments, changeDepartment }) => {
   const [graphState, setGraphState] = useState<graph>({
     nodes: [],
     edges: [],
@@ -101,22 +102,17 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ changeDepartment }) => 
 
   useEffect(() => {
     getDepartments().then((res) => {
-      console.log(res);
       const graph = fromDepartmentToGraph(res);
-      console.log(graph);
       setGraphState(graph);
-      console.log(state)
     });
   }, []);
 
   useEffect(() => {
-    console.log(graphState);
     setState({
       ...state,
       graph: graphState,
       counter: graphState.nodes.length,
     });
-    console.log(state)
   }, [graphState]);
 
   //   const createNode = (x, y) => {
@@ -135,8 +131,8 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ changeDepartment }) => 
   //     });
   //   };
   const [state, setState] = useState({
-    counter: graphState.nodes.length,
-    graph: graphState,
+    counter: departments.length,
+    graph: departments.length > 0 ? fromDepartmentToGraph(departments) : { nodes: [], edges: [] },
     events: {
       select: ({ nodes, edges }) => {
         // console.log('Selected nodes:');
@@ -166,12 +162,10 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ changeDepartment }) => 
 
   // };
   const { graph, events } = state;
-  console.log(graph)
   if (graph.nodes.length == 0 || graph.edges.length == 0) {
     return null;
   } else {
-    console.log(graph)
-    return <Graph graph={graph} options={options} events={events} style={{ height: '640px' }} />;
+    return <Graph graph={graph} options={options} events={events} style={{ height: '640px', border: '1px solid black' }} />;
   }
 };
 
