@@ -136,10 +136,6 @@ const History = ({ id }: { id?: string }) => {
                                 <p>{push.creator.surname} {push.creator.name} {push.creator.middleName}</p>
                             </div> */}
                             <div className={styles['history-not-owner-div']}>
-                                <h5>Дата создания: </h5>
-                                <p>{formatDate(push.creator.createDate)}</p>
-                            </div>
-                            <div className={styles['history-not-owner-div']}>
                                 <h5>Отправлено: </h5>
                                 <p>{formatDate(push.time)}</p>
                             </div>
