@@ -64,11 +64,11 @@ const DepartmentsLaw = () => {
     }
 
     const GetDepartmentById = (id: string) => {
-        console.log(id)
+        // console.log(id)
         getDepartmentById(id)
             .then(response => {
                 setDepartment(response)
-                console.log("DEPARTMENT", response)
+                // console.log("DEPARTMENT", response)
                 setInputDepartmentName(response.name)
                 response.canSendTo !== undefined ? setSelectedDepartments(response.canSendTo?.map((item: { id: string; }) => item.id)) : setSelectedDepartments([]);
             })
@@ -143,12 +143,12 @@ const DepartmentsLaw = () => {
         } else {
             chosenRole.push('ROLE_USER')
         }
-        console.log(chosenRole)
+        // console.log(chosenRole)
         users.map(user => {
             bindUserToDepartment(department_id, user.id, chosenRole)
                 .then(response => {
                     GetDepartmentById(department_id)
-                    console.log(response)
+                    // console.log(response)
                 })
                 .catch(error => {
                     console.log(error)
@@ -163,11 +163,11 @@ const DepartmentsLaw = () => {
         if (remove_role === 'ROLE_EMPLOYEE') {
             finalRole.push('ROLE_USER')
         }
-        console.log(finalRole)
+        // console.log(finalRole)
         bindUserToDepartment(department_id, user_id, finalRole)
             .then(response => {
                 GetDepartmentById(department_id)
-                console.log(response)
+                // console.log(response)
             })
             .catch(error => {
                 console.log(error)

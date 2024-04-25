@@ -52,16 +52,16 @@ const options = {
     borderWidth: 1,
     borderWidthSelected: 2,
     color: {
+      border: '#000000',
+      background: '#ffffff',
+      highlight: {
         border: '#000000',
         background: '#ffffff',
-        highlight: {
-            border: '#000000',
-            background: '#ffffff',
-        },
-        hover: {
-            border: '#000000',
-            background: '#ffffff',
-        },
+      },
+      hover: {
+        border: '#000000',
+        background: '#ffffff',
+      },
     },
     opacity: 1,
     shape: 'dot',
@@ -84,18 +84,18 @@ function randomColor() {
     '#e041b1',
     '#e04141',
   ];
-    return colors[Math.floor(Math.random() * colors.length)];
+  return colors[Math.floor(Math.random() * colors.length)];
 }
 
 const GraphComponent = () => {
-    const [graphState, setGraphState] = useState<graph>({
-        nodes: [{ id: '1', label: 'Node 1', color: '#e04141' }],
-        edges: [{ from: '1', to: '2' }],
-    });
+  const [graphState, setGraphState] = useState<graph>({
+    nodes: [{ id: '1', label: 'Node 1', color: '#e04141' }],
+    edges: [{ from: '1', to: '2' }],
+  });
 
   useEffect(() => {
     getDepartments().then((res) => {
-      console.log(res);
+      // console.log(res);
       const graph = fromDepartmentToGraph(res);
       //   console.log(fromDepartmentToGraph(res));
       setGraphState(graph);
@@ -115,7 +115,7 @@ const GraphComponent = () => {
           //   },
         },
       });
-      console.log(graphState);
+      // console.log(graphState);
     });
   }, []);
 

@@ -9,7 +9,7 @@ self.addEventListener('fetch', () => {
   try {
     const urlParams = new URLSearchParams(location.search);
     self.firebaseConfig = Object.fromEntries(urlParams);
-    console.log(urlParams);
+    // console.log(urlParams);
   } catch (err) {
     console.error('Failed to add event listener', err);
   }
@@ -33,12 +33,12 @@ try {
 if (messaging) {
   try {
     messaging.onBackgroundMessage((payload) => {
-    console.log('Received background message: ', payload);
+      // console.log('Received background message: ', payload);
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = { body: payload.notification.body };
+      const notificationTitle = payload.notification.title;
+      const notificationOptions = { body: payload.notification.body };
 
-    self.registration.showNotification(notificationTitle, notificationOptions);
+      self.registration.showNotification(notificationTitle, notificationOptions);
     });
   } catch (err) {
     console.log(err);

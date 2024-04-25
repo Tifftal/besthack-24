@@ -64,7 +64,7 @@ const MainPage = () => {
         me().then((res) => {
             // setUser(res);
             dispatch(setUser(res))
-            console.log(res);
+            // console.log(res);
         });
     }, []);
 

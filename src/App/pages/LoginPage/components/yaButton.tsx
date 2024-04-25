@@ -16,19 +16,19 @@ const YaOAuthButton = () => {
           buttonSize: 'm',
           buttonBorderRadius: 0
         })
-        .then(result => {
-          return result.handler();
-        })
-        .then(data => {
-          console.log('Сообщение с токеном: ', data);
-          // Здесь можно установить состояние компонента с данными, если нужно
-          resolve(data);
-        })
-        .catch(error => {
-          console.log('Что-то пошло не так: ', error);
-          // Здесь можно обработать ошибку, если нужно
-          reject(error);
-        });
+          .then(result => {
+            return result.handler();
+          })
+          .then(data => {
+            // console.log('Сообщение с токеном: ', data);
+            // Здесь можно установить состояние компонента с данными, если нужно
+            resolve(data);
+          })
+          .catch(error => {
+            console.log('Что-то пошло не так: ', error);
+            // Здесь можно обработать ошибку, если нужно
+            reject(error);
+          });
       });
     };
 

@@ -31,7 +31,7 @@ const LoginPage = () => {
   const handleLogin = async () => {
     try {
       const res = await login(form.values.email, form.values.password);
-      console.log(res);
+      // console.log(res);
 
       if (res.jwtTokens) {
         localStorage.setItem('atoken', res.jwtTokens.access);
@@ -57,7 +57,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (user.length !== 0 && user) {
-      console.log(user);
+      // console.log(user);
       axios
         .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
           headers: {
@@ -66,14 +66,14 @@ const LoginPage = () => {
           },
         })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           store.dispatch({ type: 'SET_USER', payload: res.data });
           console.log(store.getState());
           // sent the data to the backend
           axios
             .post('http://localhost:5000/api/v1/auth/google', res.data)
             .then((res) => {
-              console.log(res.data);
+              // console.log(res.data);
             })
             .catch((err) => console.log(err));
         })
