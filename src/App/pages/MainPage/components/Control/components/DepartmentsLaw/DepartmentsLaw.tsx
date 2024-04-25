@@ -145,7 +145,7 @@ const DepartmentsLaw = () => {
         users.map(user => {
             if (user && user.id) {
                 bindUserToDepartment(department_id, user.id, chosenRole)
-                    .then(response => {
+                    .then(() => {
                         GetDepartmentById(department_id)
                     })
                     .catch(error => {
@@ -163,7 +163,7 @@ const DepartmentsLaw = () => {
             finalRole.push('ROLE_USER')
         }
         bindUserToDepartment(department_id, user_id, finalRole)
-            .then(response => {
+            .then(() => {
                 GetDepartmentById(department_id)
             })
             .catch(error => {

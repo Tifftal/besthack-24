@@ -113,52 +113,16 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ departments, changeDepa
     });
   }, [graphState]);
 
-  //   const createNode = (x, y) => {
-  //     const color = randomColor();
-  //     setState(({ graph: { nodes, edges }, counter, ...rest }) => {
-  //       const id = counter + 1;
-  //       const from = Math.floor(Math.random() * (counter - 1)) + 1;
-  //       return {
-  //         graph: {
-  //           nodes: [...nodes, { id, label: `Node ${id}`, color, x, y }],
-  //           edges: [...edges, { from, to: id }],
-  //         },
-  //         counter: id,
-  //         ...rest,
-  //       };
-  //     });
-  //   };
   const [state, setState] = useState({
     counter: departments.length,
     graph: departments.length > 0 ? fromDepartmentToGraph(departments) : { nodes: [], edges: [] },
     events: {
       select: ({ nodes, edges }) => {
-        // console.log('Selected nodes:');
-        // console.log('Selected edges:');
-        // console.log(edges);
-        // alert('Selected node: ' + nodes);
         changeDepartment(nodes[0]);
       },
-      //   doubleClick: ({ pointer: { canvas } }) => {
-      //     createNode(canvas.x, canvas.y);
-      //   },
     },
   });
 
-  // const events =  {
-  //   select: ({ nodes, edges }) => {
-  //     // console.log('Selected nodes:');
-  //     console.log(nodes);
-  //     // console.log('Selected edges:');
-  //     // console.log(edges);
-  //     // alert('Selected node: ' + nodes);
-  //     changeDepartment(nodes[0]);
-  //   },
-  //   //   doubleClick: ({ pointer: { canvas } }) => {
-  //   //     createNode(canvas.x, canvas.y);
-  //   //   },
-
-  // };
   const { graph, events } = state;
   if (graph.nodes.length == 0 || graph.edges.length == 0) {
     return null;

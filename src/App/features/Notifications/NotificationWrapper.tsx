@@ -37,7 +37,7 @@ const NotificationWrapper: React.FC<Props> = ({ children }) => {
             getFirebaseToken().then((firebaseToken: string | undefined) => {
                 // todo: Add storing firebase token
                 if (firebaseToken) {
-                    console.log(firebaseToken);
+                    // console.log(firebaseToken);
                 }
             });
         };

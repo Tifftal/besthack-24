@@ -62,13 +62,10 @@ const MainPage = () => {
             navigate('/login');
         }
         me().then((res) => {
-            // setUser(res)
-            console.log(res);
             dispatch(setUser(res))
             if (res.globalRole === "ROLE_USER") {
                 navigate('/profile');
             }
-            // console.log(res);
         });
     }, []);
 

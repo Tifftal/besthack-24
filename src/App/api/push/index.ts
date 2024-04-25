@@ -46,7 +46,6 @@ export const getHistory = async ({ creatorId, fromDepartmentId, toUserId }: { cr
         return response
     }
     catch (error) {
-        console.log("HERE")
         console.error(`Error occured: ${error}`)
     }
 }

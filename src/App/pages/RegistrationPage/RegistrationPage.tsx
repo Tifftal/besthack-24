@@ -46,8 +46,7 @@ const RegistrationPage = () => {
       const status = await generatePushToken();
 
       if (status === 200) {
-        // console.log(status);
-        setError(false);
+        setError(null);
         navigate('/');
       }
     } catch (error) {
