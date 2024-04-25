@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getHistory, getPush } from 'App/api/push';
+import { getHistory } from 'App/api/push';
 import { Notification, Select } from '@mantine/core';
 
 import styles from './History.module.scss';
@@ -14,7 +14,6 @@ const History = ({ id }: { id?: string }) => {
     const [users, setUsers] = useState<FullInfo[]>([]);
     const [departments, setDepartments] = useState<Department[]>([]);
     const [creatorUserId, setCreatorUserId] = useState<string>();
-    const [toUserId, setToUserId] = useState<string>();
     const [fromDepartmentId, setFromDepartmentId] = useState<string>();
 
     useEffect(() => {
@@ -59,7 +58,7 @@ const History = ({ id }: { id?: string }) => {
                 console.log("HERE")
                 console.log(error)
             })
-    }, [creatorUserId, fromDepartmentId, toUserId])
+    }, [creatorUserId, fromDepartmentId])
 
     function formatDate(dateString: string) {
         const options: Intl.DateTimeFormatOptions = {
@@ -85,10 +84,6 @@ const History = ({ id }: { id?: string }) => {
             setFromDepartmentId(selectedOption);
         }
     };
-
-    // const handleSelectToUserChange = (selectedOption: string) => {
-    //     setToUserId(selectedOption);
-    // };
 
     return (
         <div className={styles.history}>
@@ -116,16 +111,6 @@ const History = ({ id }: { id?: string }) => {
                     onChange={handleSelectDepartmentChange}
                     value={fromDepartmentId}
                 />
-                {/* <Select
-                    label='Получатель'
-                    placeholder='Выберите получателя'
-                    data={users.map(item => ({
-                        value: item.id,
-                        label: `${item.surname} ${item.name} ${item.middleName}`
-                    }))}
-                    onChange={handleSelectToUserChange}
-                    value={toUserId}
-                /> */}
             </div>
 
             {
@@ -150,10 +135,6 @@ const History = ({ id }: { id?: string }) => {
                                 <h5>Получатель: </h5>
                                 <p>{push.creator.surname} {push.creator.name} {push.creator.middleName}</p>
                             </div> */}
-                            <div className={styles['history-not-owner-div']}>
-                                <h5>Дата создания: </h5>
-                                <p>{formatDate(push.creator.createDate)}</p>
-                            </div>
                             <div className={styles['history-not-owner-div']}>
                                 <h5>Отправлено: </h5>
                                 <p>{formatDate(push.time)}</p>

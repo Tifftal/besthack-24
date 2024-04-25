@@ -1,6 +1,6 @@
 import { ActionIcon, Button, Input, InputBase, Modal, MultiSelect, Pill } from '@mantine/core';
 import { IconCheckbox, IconEdit, IconPlus } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDepartmentState } from 'App/store/DepartmentSlice/departmentSelector';
 import { bindUserToDepartment, getDepartmentById, getDepartments, updateCanSendToDepartment, updateDepartment } from 'App/api/department/index';
@@ -10,6 +10,7 @@ import classes from './DepartmentsLaw.module.css';
 import styles from './DepartmentLaw.module.scss';
 import { useDisclosure } from '@mantine/hooks';
 import { getUsers } from 'App/api/user/index';
+import { Department, FullInfo } from 'App/pages/MainPage/MainPage';
 
 const DepartmentsLaw = () => {
     const [department, setDepartment] = useState<Department>();
@@ -17,10 +18,10 @@ const DepartmentsLaw = () => {
     const [inputDepartmentName, setInputDepartmentName] = useState('');
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [hasChanged, setHasChanged] = useState(false);
-    const [users, setUsers] = useState([]);
-    const [allUsers, setAllUsers] = useState([]);
-    const [employees, setEmployees] = useState([]);
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [users, setUsers] = useState<FullInfo[]>([]);
+    const [allUsers, setAllUsers] = useState<FullInfo[]>([]);
+    const [employees, setEmployees] = useState<FullInfo[]>([]);
+    const [selectedUsers, setSelectedUsers] = useState<FullInfo[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchUser, setSearchUser] = useState('');
     const [addedRole, setAddedRole] = useState('ROLE_USER')
@@ -46,15 +47,15 @@ const DepartmentsLaw = () => {
         setHasChanged(true)
     };
 
-    const handleChangeName = (event: any) => {
+    const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
         setInputDepartmentName(event.target.value);
     };
 
-    const handleSearch = (event) => {
+    const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
 
-    const handleSearchUser = (event) => {
+    const handleSearchUser = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchUser(event.target.value);
     };
 
@@ -64,11 +65,9 @@ const DepartmentsLaw = () => {
     }
 
     const GetDepartmentById = (id: string) => {
-        // console.log(id)
         getDepartmentById(id)
             .then(response => {
                 setDepartment(response)
-                // console.log("DEPARTMENT", response)
                 setInputDepartmentName(response.name)
                 response.canSendTo !== undefined ? setSelectedDepartments(response.canSendTo?.map((item: { id: string; }) => item.id)) : setSelectedDepartments([]);
             })
@@ -132,27 +131,27 @@ const DepartmentsLaw = () => {
 
     const handleRemoveUser = (userId: string) => {
         setSelectedUsers((prevSelectedUsers) =>
-            prevSelectedUsers.filter((user) => user.id !== userId)
+            prevSelectedUsers.filter((user) => user && user.id !== userId)
         );
     };
 
-    const AddUsersToDepartment = (department_id: string, users: [], role: string) => {
+    const AddUsersToDepartment = (department_id: string, users: FullInfo[], role: string) => {
         let chosenRole = [];
         if (role === 'ROLE_EMPLOYEE') {
             chosenRole.push('ROLE_EMPLOYEE', 'ROLE_USER')
         } else {
             chosenRole.push('ROLE_USER')
         }
-        // console.log(chosenRole)
         users.map(user => {
-            bindUserToDepartment(department_id, user.id, chosenRole)
-                .then(response => {
-                    GetDepartmentById(department_id)
-                    // console.log(response)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            if (user && user.id) {
+                bindUserToDepartment(department_id, user.id, chosenRole)
+                    .then(response => {
+                        GetDepartmentById(department_id)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            }
         })
         setSelectedUsers([]);
         close();
@@ -189,13 +188,14 @@ const DepartmentsLaw = () => {
                                 <Pill
                                     styles={{ root: { marginBottom: 10 } }}
                                     withRemoveButton
-                                    onRemove={() => handleRemoveUser(user.id)}
+                                    onRemove={() => user && handleRemoveUser(user.id)}
                                 >
-                                    {user.username}
+                                    {user && user.username}
                                 </Pill>
                             )
                             : null
                     }
+
                 </Pill.Group>
                 {
                     selectedUsers.length !== 0 ?
@@ -211,18 +211,18 @@ const DepartmentsLaw = () => {
                 <Input placeholder="Поиск" value={searchUser} onChange={handleSearchUser} />
                 <div className={styles['control-law-modal']}>
                     {allUsers.map((item) => {
-                        if (item.username.toLowerCase().includes(searchUser.toLowerCase()) ||
+                        if (item && (
+                            item.username.toLowerCase().includes(searchUser.toLowerCase()) ||
                             item.name.toLowerCase().includes(searchUser.toLowerCase()) ||
                             item.surname.toLowerCase().includes(searchUser.toLowerCase()) ||
                             item.middleName.toLowerCase().includes(searchUser.toLowerCase())
-                        ) {
+                        )) {
                             if (item.name !== '' && !selectedUsers.find(user => user.id === item.id)) {
                                 return (
                                     <button
                                         className={styles['control-law-modal-btn']}
                                         key={item.id}
                                         onClick={() => setSelectedUsers(state => [...state, item])}
-
                                     >
                                         <h5>{item.surname} {item.name} {item.middleName}</h5>
                                         <p>{item.username}</p>
@@ -233,6 +233,7 @@ const DepartmentsLaw = () => {
                             return null;
                         }
                     })}
+
                 </div>
             </Modal>
             <div className={styles['control-law-departments']}>
