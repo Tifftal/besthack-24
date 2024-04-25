@@ -26,6 +26,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const [user, setUser] = useState([]);
+  const [error, setError] = useState(null);
   //   const [profile, setProfile] = useState([]);
 
   const handleLogin = async () => {
@@ -43,10 +44,12 @@ const LoginPage = () => {
       const status = await generatePushToken();
 
       if (status === 200) {
+        setError(null);
         navigate('/');
       }
     } catch (err) {
       console.log(err);
+      setError(err);
     }
   };
 
@@ -92,24 +95,25 @@ const LoginPage = () => {
       <form onSubmit={form.onSubmit(handleLogin)} className={styles["login-page-form"]}>
         <TextInput mt="sm" label="Логин" placeholder="Логин" {...form.getInputProps('email')} />
         <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
+        {error && <Text color="red">Неверный логин или пароль</Text>}
         <div className={styles['login-page-form-btn']}>
           <Button type="submit" mt="sm">
             Войти
           </Button>
-          <Button
+          {/* <Button
             variant="default"
             mt="sm"
             onClick={loginG}
             leftSection={<IconBrandGoogleFilled />}
           >
             Войти через Google
-          </Button>
+          </Button> */}
 
         </div>
-        <div className={styles['login-page-form-reg']}>
+        {/* <div className={styles['login-page-form-reg']}>
           <Text>Ещё нет аккаунта?</Text>
           <NavLink to='/registration'>Зарегестрироваться</NavLink>
-        </div>
+        </div> */}
         {/* Я бы удалил эту штуку, но вдруг кто-то есть герой */}
         {/* <YaOAuthButton onSuccess={handlYaSuccess} onError={handleYaError} /> */}
       </form>

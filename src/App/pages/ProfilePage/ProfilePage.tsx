@@ -48,6 +48,7 @@ const ProfilePage = () => {
     }
   };
 
+
   const editForm = useForm({
     initialValues: {
       name: '',
@@ -65,8 +66,9 @@ const ProfilePage = () => {
     <div className={styles['profile-page']}>
       <div className={styles['profile-page__header']}>
         <h1>Профиль</h1>
-        <Button variant="outline" color="blue">
-          <NavLink to="/">Вернуться на главную</NavLink>
+
+        <Button variant="outline" color="blue" component={NavLink} to="/">
+          Вернуться на главную
         </Button>
       </div>
       <Modal opened={opened} onClose={close} title="Редактирование профиля" centered>
