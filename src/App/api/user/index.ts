@@ -146,16 +146,23 @@ export const getUsersAllowedToSend = async({
   departmentId,
 }: {
   hasDepartment?: boolean,
-  departmentId?: string,
+  departmentId: string,
   role?: string
 }) => {
   try {
-    let URL = `/main/department/`;
+    let URL = `/main/department/${departmentId}/canSendUsers?page=0&size=${USERS_LIMIT}&sort=ASC`;
 
-    if (departmentId) {
-      // URL
+    if (hasDepartment) {
+      URL += `?hasDepartment=${hasDepartment}`;
     }
 
+    if (role) {
+      URL += `&role=${role}`;
+    }
+
+    const { data, status } = await apiInstance.get(URL);
+
+    return status === 200 ? data : [];
   } catch (err) {
     console.error("Error occured while fetching users: ", err);
   }

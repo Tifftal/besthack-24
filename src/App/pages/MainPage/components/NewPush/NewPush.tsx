@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectDepartmentState } from '../../../../store/DepartmentSlice/departmentSelector';
 import { Button, Checkbox, Input, MultiSelect, Notification, Select, Textarea } from '@mantine/core';
 import { setUsers } from '../../../../store/UserSlice/UserSlice';
-import { getUsers } from '../../../../api/user/index';
+import { getUsers, getUsersAllowedToSend } from '../../../../api/user/index';
 import { selectAllUsers, selectIsUserAdmin, selectUsersDepartments } from '../../../../store/UserSlice/userSelector';
 import { getNotificationColor } from '../../../../helpers/getNotificationColor';
 import { sendPushNotification } from '../../../../api/push/index';
@@ -121,15 +121,29 @@ const NewPush = () => {
     }
 
     useEffect(() => {
-        getUsers({
-            hasDepartment: hasDepartment,
-            role: role,
-            departmentId: department,
-        })
-            .then(({ content }) => {
-                dispatch(setUsers(content));
+        if (isUserAdmin) {
+            getUsers({
+                hasDepartment: hasDepartment,
+                role: role,
+                departmentId: department,
             })
-            .catch(err => console.error(err));
+                .then(({ content }) => {
+                    dispatch(setUsers(content));
+                })
+        } else {
+            if (!departureDepartment) {
+                return;
+            }
+            
+            getUsersAllowedToSend({
+                hasDepartment: hasDepartment,
+                role: role,
+                departmentId: departureDepartment,
+            })
+                .then(({ content }) => {
+                    dispatch(setUsers(content));
+                })
+        }
     }, [hasDepartment, role, department]);
 
     return (
