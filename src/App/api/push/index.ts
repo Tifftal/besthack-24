@@ -41,6 +41,8 @@ export const getHistory = async ({ creatorId, fromDepartmentId, toUserId }: { cr
         }
     }
 
+    console.log(URL)
+
     try {
         const response = await apiInstance.get(URL)
         return response

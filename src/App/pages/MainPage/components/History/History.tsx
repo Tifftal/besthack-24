@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getHistory } from 'App/api/push';
-import { Notification, Select, Text } from '@mantine/core';
+import { getHistory, getPush } from 'App/api/push';
+import { Loader, Notification, Select, Text } from '@mantine/core';
 
 import styles from './History.module.scss';
 import { getNotificationColor } from '../../../../helpers/getNotificationColor';
@@ -15,6 +15,7 @@ const History = ({ id }: { id?: string }) => {
     const [departments, setDepartments] = useState<Department[]>([]);
     const [creatorUserId, setCreatorUserId] = useState<string>();
     const [fromDepartmentId, setFromDepartmentId] = useState<string>();
+    const [recipients, setRecipients] = useState(new Map());
 
     useEffect(() => {
         getUsers({})
@@ -57,6 +58,21 @@ const History = ({ id }: { id?: string }) => {
                 console.error(error)
             })
     }, [creatorUserId, fromDepartmentId])
+
+    useEffect(() => {
+        history.forEach((item, index) => {
+            setTimeout(() => {
+                getPush(item.id)
+                    .then(response => {
+                        setRecipients(prevRecipients => new Map(prevRecipients).set(item.id, `${response?.data.history[0].toUser.surname} ${response?.data.history[0].toUser.name} ${response?.data.history[0].toUser.middleName}`));
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }, index * 1000);
+        });
+    }, [history]);
+
 
     function formatDate(dateString: string) {
         const options: Intl.DateTimeFormatOptions = {
@@ -123,11 +139,16 @@ const History = ({ id }: { id?: string }) => {
                                 <h5>Отправитель: </h5>
                                 <p>{push.creator.surname} {push.creator.name} {push.creator.middleName}</p>
                             </div>
-                            {/* <div className={styles['history-not-owner-div']}>
-                                <p>{getRecipient(push.id)}</p>
+                            <div className={styles['history-not-owner-div']}>
                                 <h5>Получатель: </h5>
-                                <p>{push.creator.surname} {push.creator.name} {push.creator.middleName}</p>
-                            </div> */}
+                                <p>
+                                    {
+                                        recipients.has(push.id)
+                                            ? recipients.get(push.id)
+                                            : <Loader color="blue" size="xs" />
+                                    }
+                                </p>
+                            </div>
                             <div className={styles['history-not-owner-div']}>
                                 <h5>Отправлено: </h5>
                                 <p>{formatDate(push.time)}</p>
@@ -144,7 +165,7 @@ const History = ({ id }: { id?: string }) => {
                         </Notification>
                     </div>
                 ))
-            ): (
+            ) : (
                 <Text>Пусто</Text>
             )}
 

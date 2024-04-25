@@ -56,17 +56,17 @@ const MainPage = () => {
     navigate('/login');
   };
 
-    useEffect(() => {
-        if (!localStorage.getItem('atoken')) {
-            navigate('/login');
-        }
-        me().then((res) => {
-            dispatch(setUser(res))
-            if (res.globalRole === "ROLE_USER") {
-                navigate('/profile');
-            }
-        });
-    }, []);
+  useEffect(() => {
+    if (!localStorage.getItem('atoken')) {
+      navigate('/login');
+    }
+    me().then((res) => {
+      dispatch(setUser(res))
+      if (res.globalRole === "ROLE_USER") {
+        navigate('/profile');
+      }
+    });
+  }, []);
 
   const iconStyle = { width: rem(15), height: rem(15) };
 
@@ -74,15 +74,15 @@ const MainPage = () => {
     <div className={styles['main-page']}>
       <Tabs defaultValue="history">
         <Tabs.List>
-                    {user.globalRole === 'ROLE_ADMIN' ? (
-                        <>
+          {user.globalRole === 'ROLE_ADMIN' ? (
+            <>
               <Tabs.Tab value="history" leftSection={<IconHistory style={iconStyle} />}>
                 История
               </Tabs.Tab>
               <Tabs.Tab value="settings" leftSection={<IconSettings style={iconStyle} />}>
                 Управление
               </Tabs.Tab>
-                    </>) : null}
+            </>) : null}
           <Tabs.Tab value="new-push" leftSection={<IconPlus style={iconStyle} />}>
             Новое уведомление
           </Tabs.Tab>
@@ -93,7 +93,7 @@ const MainPage = () => {
             <Text size="md" fw={400} mr={8}>
               Вы вошли как
             </Text>
-            <NavLink to="/profile" style={{textDecoration: "none"}}>
+            <NavLink to="/profile" style={{ textDecoration: "none" }}>
               <Text mr={30} fw={600} c="blue">
                 {user?.surname} {user?.name} {user?.middleName}{' '}
               </Text>
