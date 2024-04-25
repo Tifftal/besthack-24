@@ -1,16 +1,14 @@
 import { TextInput, Button, PasswordInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useGoogleLogin } from '@react-oauth/google';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 // import YaOAuthButton from './components/yaButton';
 import { setUser as setUserToStore } from '../../store/UserSlice/UserSlice';
-import { store } from '../../store/store';
 import { generatePushToken, login } from '../../api/user/index';
 
 import styles from './LoginPage.module.scss';
 import { useDispatch } from 'react-redux';
+
 
 const LoginPage = () => {
   //   const handlYaSuccess = (data) => {
@@ -24,8 +22,7 @@ const LoginPage = () => {
   //   };
   const dispatch = useDispatch();
 
-  const [user, setUser] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   //   const [profile, setProfile] = useState([]);
 
   const handleLogin = async () => {
@@ -42,44 +39,44 @@ const LoginPage = () => {
 
       const status = await generatePushToken();
       if (status === 200) {
-        setError(null);
+        setError(false);
         navigate('/');
       }
     } catch (err) {
-      setError(err);
+      setError(true);
     }
   };
 
-  const loginG = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
-    onError: (error) => console.log('Login Failed:', error),
-  });
+  // const loginG = useGoogleLogin({
+  //   onSuccess: (codeResponse) => setUser(codeResponse),
+  //   onError: (error) => console.log('Login Failed:', error),
+  // });
 
-  useEffect(() => {
-    if (user.length !== 0 && user) {
-      // console.log(user);
-      axios
-        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: 'application/json',
-          },
-        })
-        .then((res) => {
-          // console.log(res.data);
-          store.dispatch({ type: 'SET_USER', payload: res.data });
-          console.log(store.getState());
-          // sent the data to the backend
-          axios
-            .post('http://localhost:5000/api/v1/auth/google', res.data)
-            .then((res) => {
-              // console.log(res.data);
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user.length !== 0 && user) {
+  //     // console.log(user);
+  //     axios
+  //       .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${user.access_token}`,
+  //           Accept: 'application/json',
+  //         },
+  //       })
+  //       .then((res) => {
+  //         // console.log(res.data);
+  //         store.dispatch({ type: 'SET_USER', payload: res.data });
+  //         console.log(store.getState());
+  //         // sent the data to the backend
+  //         axios
+  //           .post('http://localhost:5000/api/v1/auth/google', res.data)
+  //           .then((res) => {
+  //             // console.log(res.data);
+  //           })
+  //           .catch((err) => console.log(err));
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  // }, [user]);
 
   const navigate = useNavigate();
   const form = useForm({

@@ -20,7 +20,7 @@ export type RegResponse = {
 
 const RegistrationPage = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -47,11 +47,11 @@ const RegistrationPage = () => {
 
       if (status === 200) {
         // console.log(status);
-        setError(null);
+        setError(false);
         navigate('/');
       }
     } catch (error) {
-      setError(error);
+      setError(true);
     }
   };
 

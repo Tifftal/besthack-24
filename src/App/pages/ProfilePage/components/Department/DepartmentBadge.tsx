@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useDisclosure } from '@mantine/hooks';
 import { Popover, Text, Badge } from '@mantine/core';
 import { Department } from 'App/pages/MainPage/MainPage';
@@ -6,6 +7,7 @@ export type DepartmentBadgeProps = {
     department: Department;
 };
 
+// eslint-disable-next-line react/prop-types
 const DepartmentBadge: React.FC<DepartmentBadgeProps> = ({ department }) => {
   const [opened, { close, open }] = useDisclosure(false);
   return (
