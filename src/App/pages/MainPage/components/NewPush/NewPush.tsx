@@ -209,6 +209,7 @@ const NewPush = () => {
                                 onChange={(e) => {
                                     setNotification({ ...notification, title: e.target.value })
                                 }}
+                                placeholder='Вы можете использовать ключевые слова: Важно, Срочно'
                             />
                         }
                         {...getNotificationColor(notification.title)}

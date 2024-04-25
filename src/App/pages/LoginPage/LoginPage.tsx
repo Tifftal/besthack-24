@@ -42,7 +42,7 @@ const LoginPage = () => {
       dispatch(setUserToStore(res.data));
 
       const status = await generatePushToken();
-
+      console.log("STATUS", status);
       if (status === 200) {
         setError(null);
         navigate('/');

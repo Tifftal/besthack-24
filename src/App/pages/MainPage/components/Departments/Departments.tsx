@@ -1,4 +1,4 @@
-import { Group, Table } from '@mantine/core';
+import { Group, Table, Text } from '@mantine/core';
 import GraphComponent from './components/Graph';
 import { useState, useEffect } from 'react';
 import { Department } from '../../MainPage';
@@ -23,7 +23,10 @@ const Departments = () => {
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 20 }}>
-      <GraphComponent departments={departments} changeDepartment={setDepartment} />
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%', textAlign: 'center' }}>
+        <GraphComponent departments={departments} changeDepartment={setDepartment} />
+        <Text>Перемещайте мышь с зажатой ЛКМ для взаимодействия</Text>
+      </div>
       <Group m="sm">
         <Table miw={300}>
           <Table.Thead>
