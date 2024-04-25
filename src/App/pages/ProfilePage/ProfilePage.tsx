@@ -6,7 +6,7 @@ import { IconAt, IconEdit, IconHeart } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { updateUser } from '../../api/user/index';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import DepartmentBadge from './components/Department/DepartmentBadge';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserState } from '../../store/UserSlice/userSelector';
@@ -27,6 +27,7 @@ export type UserInitials = {
 const ProfilePage = () => {
   // const [user, setUser] = useState<FullInfo>(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector(selectUserState);
   const [opened, { open, close }] = useDisclosure(false);
@@ -62,18 +63,27 @@ const ProfilePage = () => {
       middleName: (value: string) => (value.length > 0 ? null : 'Введите отчество'),
     },
   });
-  console.log(user);
+
+  const logout = () => {
+    localStorage.removeItem('atoken');
+    localStorage.removeItem('rtoken');
+    navigate('/login');
+  };
+
   return (
     <>
       <div className={styles['profile-page']}>
         <div className={styles['profile-page__header']}>
           <h1>Профиль</h1>
           {user.globalRole !== "ROLE_USER" ? (
-    
-        <Button variant="outline" color="blue" component={NavLink} to="/">
+
+            <Button variant="outline" color="blue" component={NavLink} to="/">
               Вернуться на главную
             </Button>
           ) : null}
+          <Button variant="outline" className={styles['main-page-logout-btn']} onClick={logout}>
+            Выйти
+          </Button>
         </div>
         <Modal opened={opened} onClose={close} title="Редактирование профиля" centered>
           <form onSubmit={editForm.onSubmit(handleEdit)}>
@@ -121,10 +131,10 @@ const ProfilePage = () => {
           </Group>
         </Group>
       </div>
-      <div style={{padding: '40px'}}>
-      <History
-        id={user.id}
-      />
+      <div style={{ padding: '40px' }}>
+        <History
+          id={user.id}
+        />
       </div>
     </>
   );
