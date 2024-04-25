@@ -101,11 +101,9 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ departments, changeDepa
   });
 
   useEffect(() => {
-    getDepartments().then((res) => {
-      const graph = fromDepartmentToGraph(res);
-      setGraphState(graph);
-    });
-  }, []);
+    const graph = fromDepartmentToGraph(departments);
+    setGraphState(graph);
+  }, [departments]);
 
   useEffect(() => {
     setState({

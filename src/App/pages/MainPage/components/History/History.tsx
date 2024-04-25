@@ -22,7 +22,7 @@ const History = ({ id }: { id?: string }) => {
                 setUsers(response.content)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
 
         getDepartments()
@@ -30,7 +30,7 @@ const History = ({ id }: { id?: string }) => {
                 setDepartments(response)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
     }, [])
 
@@ -51,12 +51,10 @@ const History = ({ id }: { id?: string }) => {
 
         getHistory(payload)
             .then(response => {
-                console.log("HISTORY", response?.data.content)
                 setHistory(response?.data.content)
             })
             .catch(error => {
-                console.log("HERE")
-                console.log(error)
+                console.error(error)
             })
     }, [creatorUserId, fromDepartmentId])
 

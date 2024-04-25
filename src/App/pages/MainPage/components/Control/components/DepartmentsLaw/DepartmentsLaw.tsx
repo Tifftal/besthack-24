@@ -38,7 +38,7 @@ const DepartmentsLaw = () => {
 
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
     }, [])
 
@@ -72,14 +72,14 @@ const DepartmentsLaw = () => {
                 response.canSendTo !== undefined ? setSelectedDepartments(response.canSendTo?.map((item: { id: string; }) => item.id)) : setSelectedDepartments([]);
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
         getUsers({})
             .then(response => {
                 setAllUsers(response.content)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
         getUsers({
             departmentId: id,
@@ -89,7 +89,7 @@ const DepartmentsLaw = () => {
                 setUsers(response.content)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
         getUsers({
             departmentId: id,
@@ -99,7 +99,7 @@ const DepartmentsLaw = () => {
                 setEmployees(response.content)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
     }
 
@@ -110,7 +110,7 @@ const DepartmentsLaw = () => {
                     dispatch(updateDepartments(response))
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                 })
         }
         setIsEdit(state => !state)
@@ -124,7 +124,7 @@ const DepartmentsLaw = () => {
                     setHasChanged(false)
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                 })
         }
     }
@@ -149,7 +149,7 @@ const DepartmentsLaw = () => {
                         GetDepartmentById(department_id)
                     })
                     .catch(error => {
-                        console.log(error)
+                        console.error(error)
                     })
             }
         })
@@ -167,7 +167,7 @@ const DepartmentsLaw = () => {
                 GetDepartmentById(department_id)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
     }
 
