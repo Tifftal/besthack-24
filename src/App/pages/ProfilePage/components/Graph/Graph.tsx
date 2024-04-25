@@ -39,7 +39,11 @@ type graph = {
 
 const options = {
   layout: {
-    hierarchical: false,
+    hierarchical: {
+      levelSeparation: 150,
+      nodeSpacing: 100,
+      blockShifting: true,
+    }
   },
   edges: {
     color: '#000000',
