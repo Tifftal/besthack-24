@@ -20,16 +20,16 @@ export const sendPushNotification = async (payload: SendNotification, departure:
 }
 
 export const getHistory = async ({ creatorId, fromDepartmentId, toUserId }: { creatorId?: string, fromDepartmentId?: string, toUserId?: string }) => {
-    let URL = ENDPOINTS.get_history;
+    let URL = `${ENDPOINTS.get_history}/?page=0&size=10000&sort=pushTime,desc`;
     if (creatorId !== undefined) {
-        URL += `?creatorUserId=${creatorId}`
+        URL += `&creatorUserId=${creatorId}`
     }
     if (fromDepartmentId !== undefined) {
         if (creatorId !== undefined) {
             URL += `&fromDepartmentId=${fromDepartmentId}`
         }
         else {
-            URL += `?fromDepartmentId=${fromDepartmentId}`
+            URL += `&fromDepartmentId=${fromDepartmentId}`
         }
     }
 
@@ -37,7 +37,7 @@ export const getHistory = async ({ creatorId, fromDepartmentId, toUserId }: { cr
         if (creatorId !== undefined || fromDepartmentId !== undefined) {
             URL += `&toUserId=${toUserId}`
         } else {
-            URL += `?toUserId=${toUserId}`
+            URL += `&toUserId=${toUserId}`
         }
     }
 

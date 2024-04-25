@@ -16,7 +16,7 @@ const NewPush = () => {
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [department, setDepartment] = useState<string>('');
-    const [hasDepartment, setHasDepartment] = useState<boolean | null>(null);
+    const [hasDepartment, setHasDepartment] = useState<boolean | null>(false);
     const [departureDepartment, setDepartureDepartment] = useState<string>('');
     const [notification, setNotification] = useState<Record<string, string>>({
         title: '',
@@ -213,10 +213,10 @@ const NewPush = () => {
                             }, {
                                 value: 'false',
                                 label: 'Не состоит в департаменте'
-                            }, {
-                                value: 'null',
-                                label: 'Неизвестно'
                             }]
+                        }
+                        defaultValue={
+                            'false'
                         }
                     />
 
