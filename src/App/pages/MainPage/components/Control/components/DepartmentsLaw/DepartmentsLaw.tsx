@@ -68,6 +68,7 @@ const DepartmentsLaw = () => {
         getDepartmentById(id)
             .then(response => {
                 setDepartment(response)
+                console.log("DEPARTMENT", response)
                 setInputDepartmentName(response.name)
                 response.canSendTo !== undefined ? setSelectedDepartments(response.canSendTo?.map((item: { id: string; }) => item.id)) : setSelectedDepartments([]);
             })
@@ -87,7 +88,6 @@ const DepartmentsLaw = () => {
         })
             .then(response => {
                 setUsers(response.content)
-                console.log(response.content)
             })
             .catch(error => {
                 console.log(error)
@@ -98,7 +98,6 @@ const DepartmentsLaw = () => {
         })
             .then(response => {
                 setEmployees(response.content)
-                console.log(response.content)
             })
             .catch(error => {
                 console.log(error)
@@ -148,6 +147,7 @@ const DepartmentsLaw = () => {
         users.map(user => {
             bindUserToDepartment(department_id, user.id, chosenRole)
                 .then(response => {
+                    GetDepartmentById(department_id)
                     console.log(response)
                 })
                 .catch(error => {
@@ -158,6 +158,21 @@ const DepartmentsLaw = () => {
         close();
     }
 
+    const RemoveUserFromDepartment = (department_id: string, user_id: string, remove_role: string) => {
+        let finalRole = [];
+        if (remove_role === 'ROLE_EMPLOYEE') {
+            finalRole.push('ROLE_USER')
+        }
+        console.log(finalRole)
+        bindUserToDepartment(department_id, user_id, finalRole)
+            .then(response => {
+                GetDepartmentById(department_id)
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 
     return (
         <div className={styles['control-law']}>
@@ -196,12 +211,10 @@ const DepartmentsLaw = () => {
                 <Input placeholder="Поиск" value={searchUser} onChange={handleSearchUser} />
                 <div className={styles['control-law-modal']}>
                     {allUsers.map((item) => {
-                        if (item.username.toLowerCase().includes(searchUser.toLowerCase())
-                            //это надо вернуть когда Родион наконец доделает регистрацию и у всех пользователей будут ФИО
-                            // ||
-                            // item.name.toLowerCase().includes(searchUser.toLowerCase()) ||
-                            // item.surname.toLowerCase().includes(searchUser.toLowerCase()) ||
-                            // item.middleName.toLowerCase().includes(searchUser.toLowerCase())
+                        if (item.username.toLowerCase().includes(searchUser.toLowerCase()) ||
+                            item.name.toLowerCase().includes(searchUser.toLowerCase()) ||
+                            item.surname.toLowerCase().includes(searchUser.toLowerCase()) ||
+                            item.middleName.toLowerCase().includes(searchUser.toLowerCase())
                         ) {
                             if (item.name !== '' && !selectedUsers.find(user => user.id === item.id)) {
                                 return (
@@ -319,7 +332,13 @@ const DepartmentsLaw = () => {
                 >
                     <Pill.Group>
                         {
-                            employees.length !== 0 ? employees.map(user => <Pill>{user.username}</Pill>) : "В этом отделе нет сотрудников"
+                            employees.length !== 0 ? employees.map(user =>
+                                <Pill
+                                    withRemoveButton
+                                    onRemove={() => RemoveUserFromDepartment(department.id, user.id, "ROLE_EMPLOYEE")}
+                                >
+                                    {user.username}
+                                </Pill>) : "В этом отделе нет сотрудников"
                         }
                     </Pill.Group>
                 </InputBase>
@@ -342,7 +361,14 @@ const DepartmentsLaw = () => {
                 >
                     <Pill.Group>
                         {
-                            users.length !== 0 ? users.map(user => <Pill>{user.username}</Pill>) : "В этом отделе нет пользователей"
+                            users.length !== 0 ? users.map(user =>
+                                <Pill
+                                    withRemoveButton
+                                    onRemove={() => RemoveUserFromDepartment(department.id, user.id, "ROLE_USER")}
+                                >
+                                    {user.username}
+                                </Pill>
+                            ) : "В этом отделе нет пользователей"
                         }
                     </Pill.Group>
                 </InputBase>
