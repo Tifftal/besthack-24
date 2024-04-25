@@ -1,9 +1,10 @@
 import styles from './MainPage.module.scss';
 import { Button, Flex, Tabs, Text, rem } from '@mantine/core';
-import { IconHistory, IconPlus, IconSettings } from '@tabler/icons-react';
+import { IconBuilding, IconHistory, IconPlus, IconSettings } from '@tabler/icons-react';
 import History from './components/History';
 import Control from './components/Control';
 import NewPush from './components/NewPush';
+import Departments from './components/Departments';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { me } from '../../api/user/index';
@@ -83,6 +84,9 @@ const MainPage = () => {
                     <Tabs.Tab value="new-push" leftSection={<IconPlus style={iconStyle} />}>
                         Новое уведомление
                     </Tabs.Tab>
+                    <Tabs.Tab value="departments" leftSection={<IconBuilding style={iconStyle} />}>
+                        Департаменты
+                    </Tabs.Tab>
                     <Flex
                         ml="auto"
                         align="center"
@@ -104,6 +108,10 @@ const MainPage = () => {
 
                 <Tabs.Panel value="new-push">
                     <NewPush />
+                </Tabs.Panel>
+
+                <Tabs.Panel value="departments">
+                    <Departments />
                 </Tabs.Panel>
             </Tabs>
         </div >
