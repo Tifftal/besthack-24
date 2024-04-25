@@ -30,7 +30,7 @@ const NewPush = () => {
     const usersDepartments = useSelector(selectUsersDepartments);
     const users = useSelector(selectAllUsers);
 
-    const isAllowedToSend = !(notification.body && notification.title)
+    const isAllowedToSend = !(notification.body && notification.title && departureDepartment && (selectedUsers || selectedDepartments))
 
     const formattedDepartments = departments.reduce((acc: { value: string, label: string }[], { id, name }: { id: string, name: string }) => {
         return [...acc, {
