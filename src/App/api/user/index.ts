@@ -122,13 +122,13 @@ export const updateUser = async (user: UserInitials) => {
 export const getUsers = async ({ hasDepartment, departmentId, role }: { hasDepartment?: boolean, departmentId?: string, role?: string }) => {
   try {
     let URL = `/main/user?page=0&size=${USERS_LIMIT}&sort=ASC`
-    if (hasDepartment !== undefined) {
+    if (hasDepartment) {
       URL += `&hasDepartment=${hasDepartment}`
     }
-    if (departmentId !== undefined) {
+    if (departmentId) {
       URL += `&departmentId=${departmentId}`
     }
-    if (role !== undefined) {
+    if (role) {
       URL += `&role=${role}`
     }
 
@@ -140,3 +140,23 @@ export const getUsers = async ({ hasDepartment, departmentId, role }: { hasDepar
   }
 }
 
+export const getUsersAllowedToSend = async({
+  hasDepartment,
+  role,
+  departmentId,
+}: {
+  hasDepartment?: boolean,
+  departmentId?: string,
+  role?: string
+}) => {
+  try {
+    let URL = `/main/department/`;
+
+    if (departmentId) {
+      // URL
+    }
+
+  } catch (err) {
+    console.error("Error occured while fetching users: ", err);
+  }
+}

@@ -12,3 +12,5 @@ export const selectUsername = (state: RootState) => selectUserState(state).usern
 export const selectAllUsers = (state: RootState) => selectUserState(state).users;
 
 export const selectUsersDepartments = (state: RootState) => selectUserState(state).departmentRoles;
+
+export const selectIsUserAdmin = (state: RootState) => selectUserState(state).globalRole === 'ROLE_ADMIN';

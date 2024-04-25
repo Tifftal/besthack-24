@@ -6,7 +6,7 @@ import { selectDepartmentState } from '../../../../store/DepartmentSlice/departm
 import { Button, Checkbox, Input, MultiSelect, Notification, Select, Textarea } from '@mantine/core';
 import { setUsers } from '../../../../store/UserSlice/UserSlice';
 import { getUsers } from '../../../../api/user/index';
-import { selectAllUsers, selectUsersDepartments } from '../../../../store/UserSlice/userSelector';
+import { selectAllUsers, selectIsUserAdmin, selectUsersDepartments } from '../../../../store/UserSlice/userSelector';
 import { getNotificationColor } from '../../../../helpers/getNotificationColor';
 import { sendPushNotification } from '../../../../api/push/index';
 import { SendNotification } from '../../../../api/push/types';
@@ -15,8 +15,9 @@ const NewPush = () => {
     const [role, setRole] = useState<RolesEnum | string>('');
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+    const [department, setDepartment] = useState<string>('');
     const [hasDepartment, setHasDepartment] = useState<boolean>(false);
-    const [departureDepartment, setDepartureDepartment] = useState<string>([]);
+    const [departureDepartment, setDepartureDepartment] = useState<string>('');
     const [notification, setNotification] = useState<Record<string, string>>({
         title: '',
         body: '',
@@ -24,11 +25,12 @@ const NewPush = () => {
 
     const dispatch = useDispatch();
 
+    const isUserAdmin = useSelector(selectIsUserAdmin);
     const departments = useSelector(selectDepartmentState);
     const usersDepartments = useSelector(selectUsersDepartments);
     const users = useSelector(selectAllUsers);
 
-    console.log("usersDepartments", usersDepartments);
+    const isAllowedToSend = !(notification.body && notification.title && departureDepartment && !(selectedUsers || selectedDepartments))
 
     const formattedDepartments = departments.reduce((acc: { value: string, label: string }[], { id, name }: { id: string, name: string }) => {
         return [...acc, {
@@ -37,11 +39,19 @@ const NewPush = () => {
         }]
     }, []);
     // TODO: добавить хук на форматирование данных после добавления новой регистрации с ФИО
-    const formattedUsers = users.reduce((acc: { value: string, label: string }[], { id, username }: { id: string, username: string }) => {
-        return [...acc, {
+    const formattedUsers = users.reduce((acc: { value: string, label: string }[], { id, username, name, surname, middleName }: { id: string, username: string }) => {
+        const formattedUser = {
             value: id,
-            label: username,
-        }]
+            label: '',
+        }
+
+        if (name || middleName || surname) {
+            formattedUser.label = `${surname} ${middleName} ${name}`
+
+            return [...acc, formattedUser];
+        }
+        
+        return [...acc, {...formattedUser, label: username}]
     }, []);
 
     const formattedUsersDepartments = usersDepartments.reduce((acc: { value: string, label: string }[], { department }: { department: any }) => {
@@ -67,8 +77,20 @@ const NewPush = () => {
         }
     }
 
+    const handleSelectRole = (selected: string | null) => {
+        if (selected) {
+            setRole(selected);
+        }
+    }
+
     const handleCheckDepartment = (e: React.ChangeEvent<HTMLInputElement>) => {
         setHasDepartment(e.target.checked);
+    }
+
+    const handleSelectDepartment = (selected: string | null) => {
+        if (selected) {
+            setDepartment(selected);
+        }
     }
 
     const handleSendNotification = () => {
@@ -96,23 +118,19 @@ const NewPush = () => {
         }
 
         sendPushNotification(payload as SendNotification, departureDepartment)
-            .then(response => {
-                console.log('response', response);
-            })
-            .catch(error => {
-                console.error(error);
-            })
     }
 
     useEffect(() => {
-        getUsers({})
+        getUsers({
+            hasDepartment: hasDepartment,
+            role: role,
+            departmentId: department,
+        })
             .then(({ content }) => {
                 dispatch(setUsers(content));
             })
             .catch(err => console.error(err));
-    }, []);
-
-    console.log('users', users)
+    }, [hasDepartment, role, department]);
 
     return (
         <div className={styles['new-push']}>
@@ -121,6 +139,7 @@ const NewPush = () => {
                     <Select
                         label="Выберите позицию"
                         data={RolesToSelect}
+                        onChange={handleSelectRole}
                         defaultValue=''
                         checkIconPosition='left'
                     />
@@ -129,16 +148,24 @@ const NewPush = () => {
                         onChange={handleSelectDepartureDepartment}
                         data={formattedUsersDepartments}
                         label="Выберите деп-нт отправки"
-                        hidePickedOptions
                         searchable
                     />
 
                     <MultiSelect
                         data={formattedDepartments}
-                        label="Выберите департамент(ы)"
+                        label="Выберите деп-нт(ы) назначения"
                         searchable
                         hidePickedOptions
                         onChange={handleSelectDepartments}
+                    />
+
+                    <Select
+                        label="Фильтр по деп-нту"
+                        onChange={handleSelectDepartment}
+                        data={formattedDepartments}
+                        defaultValue=''
+                        checkIconPosition='left'
+                        searchable
                     />
 
                     <MultiSelect
@@ -156,7 +183,7 @@ const NewPush = () => {
 
                     <Button
                         onClick={handleSendNotification}
-                        disabled={!(notification.body && notification.title)}
+                        disabled={isAllowedToSend}
                     >
                         Отправить уведомление
                     </Button>
