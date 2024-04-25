@@ -72,15 +72,11 @@ const History = ({ id }: { id?: string }) => {
 
 
     const handleSelectChange = (value: string | null) => {
-        if (value) {
-            setCreatorUserId(value);
-        }
+        setCreatorUserId(value || '');
     };
 
     const handleSelectDepartmentChange = (selectedOption: string | null) => {
-        if (selectedOption) {
-            setFromDepartmentId(selectedOption);
-        }
+        setFromDepartmentId(selectedOption || '');
     };
 
     return (
@@ -97,7 +93,8 @@ const History = ({ id }: { id?: string }) => {
                         }))
                     }
                     onChange={handleSelectChange}
-                    value={creatorUserId}
+                    // value={creatorUserId}?
+                    allowDeselect
                 />
                 <Select
                     label='Отделение отправки'
