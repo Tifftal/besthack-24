@@ -30,7 +30,7 @@ const NewPush = () => {
     const usersDepartments = useSelector(selectUsersDepartments);
     const users = useSelector(selectAllUsers);
 
-    const isAllowedToSend = !(notification.body && notification.title && departureDepartment && !(selectedUsers || selectedDepartments))
+    const isAllowedToSend = !(notification.body && notification.title)
 
     const formattedDepartments = departments.reduce((acc: { value: string, label: string }[], { id, name }: { id: string, name: string }) => {
         return [...acc, {
@@ -50,8 +50,8 @@ const NewPush = () => {
 
             return [...acc, formattedUser];
         }
-        
-        return [...acc, {...formattedUser, label: username}]
+
+        return [...acc, { ...formattedUser, label: username }]
     }, []);
 
     const formattedUsersDepartments = usersDepartments.reduce((acc: { value: string, label: string }[], { department }: { department: any }) => {
@@ -134,7 +134,7 @@ const NewPush = () => {
             if (!departureDepartment) {
                 return;
             }
-            
+
             getUsersAllowedToSend({
                 hasDepartment: hasDepartment,
                 role: role,

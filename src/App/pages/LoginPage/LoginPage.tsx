@@ -7,7 +7,7 @@ import axios from 'axios';
 // import YaOAuthButton from './components/yaButton';
 import { setUser as setUserToStore } from '../../store/UserSlice/UserSlice';
 import { store } from '../../store/store';
-import { login } from '../../api/user/index';
+import { generatePushToken, login } from '../../api/user/index';
 import { IconBrandGoogleFilled } from '@tabler/icons-react';
 
 import styles from './LoginPage.module.scss';
@@ -28,19 +28,26 @@ const LoginPage = () => {
   const [user, setUser] = useState([]);
   //   const [profile, setProfile] = useState([]);
 
-  const handleLogin = () => {
-    login(form.values.email, form.values.password)
-      .then((res) => {
-        console.log(res);
-        if (res.jwtTokens) {
-          localStorage.setItem('atoken', res.jwtTokens.access);
-          localStorage.setItem('rtoken', res.jwtTokens.refresh);
-        }
-        // store.dispatch({ type: 'SET_USER', payload: res.data });
-        dispatch(setUserToStore(res.data))
-        navigate('/')
-      })
-      .catch((err) => console.log(err));
+  const handleLogin = async () => {
+    try {
+      const res = await login(form.values.email, form.values.password);
+      console.log(res);
+
+      if (res.jwtTokens) {
+        localStorage.setItem('atoken', res.jwtTokens.access);
+        localStorage.setItem('rtoken', res.jwtTokens.refresh);
+      }
+
+      dispatch(setUserToStore(res.data));
+
+      const status = await generatePushToken();
+
+      if (status === 200) {
+        navigate('/');
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const loginG = useGoogleLogin({
