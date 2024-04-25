@@ -103,17 +103,17 @@ const ProfilePage = () => {
               <Text fz="h1" fw={500} className={styles.name}>
                 {user?.surname} {user?.name} {user?.middleName}
               </Text>
-              <IconEdit stroke={1.5} size="2rem" onClick={open} className={styles.icon} />
+              <IconEdit stroke={1.5} size="30px" onClick={open} className={styles.icon} />
             </Group>
             <Group wrap="nowrap" gap={10} mt={3}>
-              <IconAt stroke={1.5} size="2rem" className={styles.icon} />
+              <IconAt stroke={1.5} size="30px" className={styles.icon} />
               <Text fz="lg" c="dimmed">
                 {user?.username}
               </Text>
             </Group>
 
             <Group wrap="nowrap" gap={10} mt={5}>
-              <IconHeart stroke={1.5} size="2rem" className={styles.icon} />
+              <IconHeart stroke={1.5} size="30px" className={styles.icon} />
               <Text fz="lg" c="dimmed">
                 С нами с: {convertDate(user?.createDate || '')}
               </Text>

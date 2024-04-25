@@ -43,10 +43,10 @@ export const getHistory = async ({ creatorId, fromDepartmentId, toUserId }: { cr
 
     try {
         const response = await apiInstance.get(URL)
-        // console.log(URL)
         return response
     }
     catch (error) {
+        console.log("HERE")
         console.error(`Error occured: ${error}`)
     }
 }

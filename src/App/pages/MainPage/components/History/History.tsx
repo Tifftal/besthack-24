@@ -7,7 +7,7 @@ import { getNotificationColor } from '../../../../helpers/getNotificationColor';
 import { getUsers } from 'App/api/user';
 import { getDepartments } from 'App/api/department';
 
-const History = ({ id }: {id?: string}) => {
+const History = ({ id }: { id?: string }) => {
     const [history, setHistory] = useState([]);
     const [users, setUsers] = useState([]);
     const [departments, setDepartments] = useState([]);
@@ -18,7 +18,6 @@ const History = ({ id }: {id?: string}) => {
     useEffect(() => {
         getUsers({})
             .then(response => {
-                // console.log(response)
                 setUsers(response.content)
             })
             .catch(error => {
@@ -38,23 +37,24 @@ const History = ({ id }: {id?: string}) => {
         let payload = {};
 
         if (creatorUserId) {
-            payload = { ...payload, creatorId: creatorUserId};
+            payload = { ...payload, creatorId: creatorUserId };
         }
 
         if (fromDepartmentId) {
-            payload = {...payload, fromDepartmentId: fromDepartmentId};
+            payload = { ...payload, fromDepartmentId: fromDepartmentId };
         }
 
         if (id) {
-            payload = {...payload, toUserId: id}
+            payload = { ...payload, toUserId: id }
         }
 
         getHistory(payload)
             .then(response => {
-                // console.log(response?.data.content)
+                console.log(response?.data.content)
                 setHistory(response?.data.content)
             })
             .catch(error => {
+                console.log("HERE")
                 console.log(error)
             })
     }, [creatorUserId, fromDepartmentId, toUserId])
@@ -115,7 +115,7 @@ const History = ({ id }: {id?: string}) => {
             {
                 history !== undefined &&
                 history.map(push => (
-                    <div className={styles['history-not']}>
+                    <div className={styles['history-not']} key={push.id}>
                         <div className={styles['history-not-owner']}>
                             <div className={styles['history-not-owner-div']}>
                                 <h5>Из отдела: </h5>
