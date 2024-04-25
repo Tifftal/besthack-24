@@ -76,15 +76,15 @@ const options = {
 function randomColor() {
   const colors = [
     '#e04141',
-    '#e09c41',
-    '#e0df41',
-    '#7be041',
-    '#41e0c9',
-    '#41bfe0',
-    '#4171e0',
-    '#7a41e0',
-    '#e041b1',
-    '#e04141',
+    // '#e09c41',
+    // '#e0df41',
+    // '#7be041',
+    // '#41e0c9',
+    // '#41bfe0',
+    // '#4171e0',
+    // '#7a41e0',
+    // '#e041b1',
+    // '#e04141',
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 }

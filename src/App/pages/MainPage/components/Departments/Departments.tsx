@@ -3,17 +3,23 @@ import GraphComponent from './components/Graph';
 import { useState, useEffect } from 'react';
 import { Department } from '../../MainPage';
 import { getDepartments } from '../../../../api/department';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDepartments } from '../../../../store/DepartmentSlice/DepatmentSlice';
+import { selectDepartmentState } from '../../../../store/DepartmentSlice/departmentSelector';
 
 const Departments = () => {
   const [department, setDepartment] = useState('');
-  const [departments, setDepartments] = useState<Department[]>([]);
+
+  const dispatch = useDispatch();
+  const departments = useSelector(selectDepartmentState)
 
   useEffect(() => {
-    getDepartments().then((res) => {
-      setDepartments(res);
+    getDepartments().then((response) => {
+      dispatch(setDepartments(response))
     });
   }, []);
 
+  //@ts-expect-error
   const rows = departments.map((d) => (
     <Table.Tr key={d.id} style={department === d.id ? { backgroundColor: '#f4f4f4' } : {}}>
       <Table.Td>{d.name}</Table.Td>

@@ -52,7 +52,7 @@ const History = ({ id }: { id?: string }) => {
 
         getHistory(payload)
             .then(response => {
-                console.log(response?.data.content)
+                console.log("HISTORY", response?.data.content)
                 setHistory(response?.data.content)
             })
             .catch(error => {
@@ -135,7 +135,11 @@ const History = ({ id }: { id?: string }) => {
                         <div className={styles['history-not-owner']}>
                             <div className={styles['history-not-owner-div']}>
                                 <h5>Из отдела: </h5>
-                                <p>{push.fromDepartment.name}</p>
+                                {push?.fromDepartment?.name ? (
+                                    <p>{push?.fromDepartment?.name}</p>
+                                ) : (
+                                    <p>Администратор</p>
+                                )}
                             </div>
                             <div className={styles['history-not-owner-div']}>
                                 <h5>Отправитель: </h5>
