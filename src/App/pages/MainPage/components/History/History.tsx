@@ -6,11 +6,13 @@ import styles from './History.module.scss';
 import { getNotificationColor } from '../../../../helpers/getNotificationColor';
 import { getUsers } from 'App/api/user';
 import { getDepartments } from 'App/api/department';
+import { HistoryPush } from './types';
+import { Department, FullInfo } from 'App/pages/MainPage/MainPage';
 
 const History = ({ id }: { id?: string }) => {
-    const [history, setHistory] = useState([]);
-    const [users, setUsers] = useState([]);
-    const [departments, setDepartments] = useState([]);
+    const [history, setHistory] = useState<HistoryPush[]>([]);
+    const [users, setUsers] = useState<FullInfo[]>([]);
+    const [departments, setDepartments] = useState<Department[]>([]);
     const [creatorUserId, setCreatorUserId] = useState<string>();
     const [toUserId, setToUserId] = useState<string>();
     const [fromDepartmentId, setFromDepartmentId] = useState<string>();
@@ -60,22 +62,33 @@ const History = ({ id }: { id?: string }) => {
     }, [creatorUserId, fromDepartmentId, toUserId])
 
     function formatDate(dateString: string) {
-        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+        const options: Intl.DateTimeFormatOptions = {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+        };
         const date = new Date(dateString);
         return date.toLocaleDateString('ru-RU', options);
     }
 
-    const handleSelectChange = (selectedOption: string) => {
-        setCreatorUserId(selectedOption);
+
+    const handleSelectChange = (value: string | null) => {
+        if (value) {
+            setCreatorUserId(value);
+        }
     };
 
-    const handleSelectDepartmentChange = (selectedOption: string) => {
-        setFromDepartmentId(selectedOption);
+    const handleSelectDepartmentChange = (selectedOption: string | null) => {
+        if (selectedOption) {
+            setFromDepartmentId(selectedOption);
+        }
     };
 
-    const handleSelectToUserChange = (selectedOption: string) => {
-        setToUserId(selectedOption);
-    };
+    // const handleSelectToUserChange = (selectedOption: string) => {
+    //     setToUserId(selectedOption);
+    // };
 
     return (
         <div className={styles.history}>
@@ -83,10 +96,13 @@ const History = ({ id }: { id?: string }) => {
                 <Select
                     label='Отправитель'
                     placeholder='Выберите отправителя'
-                    data={users.map(item => ({
-                        value: item.id,
-                        label: `${item.surname} ${item.name} ${item.middleName}`
-                    }))}
+                    data={users
+                        .filter(item => item !== null)
+                        .map(item => ({
+                            value: item.id,
+                            label: `${item.surname} ${item.name} ${item.middleName}`
+                        }))
+                    }
                     onChange={handleSelectChange}
                     value={creatorUserId}
                 />
