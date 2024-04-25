@@ -7,7 +7,7 @@ import { getNotificationColor } from '../../../../helpers/getNotificationColor';
 import { getUsers } from 'App/api/user';
 import { getDepartments } from 'App/api/department';
 
-const History = () => {
+const History = ({ id }: {id?: string}) => {
     const [history, setHistory] = useState([]);
     const [users, setUsers] = useState([]);
     const [departments, setDepartments] = useState([]);
@@ -35,11 +35,21 @@ const History = () => {
     }, [])
 
     useEffect(() => {
-        getHistory({
-            creatorId: creatorUserId,
-            fromDepartmentId: fromDepartmentId,
-            toUserId: toUserId
-        })
+        let payload = {};
+
+        if (creatorUserId) {
+            payload = { ...payload, creatorId: creatorUserId};
+        }
+
+        if (fromDepartmentId) {
+            payload = {...payload, fromDepartmentId: fromDepartmentId};
+        }
+
+        if (id) {
+            payload = {...payload, toUserId: id}
+        }
+
+        getHistory(payload)
             .then(response => {
                 // console.log(response?.data.content)
                 setHistory(response?.data.content)

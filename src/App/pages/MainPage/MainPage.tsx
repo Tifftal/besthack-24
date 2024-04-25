@@ -57,16 +57,20 @@ const MainPage = () => {
     navigate('/login');
   };
 
-  useEffect(() => {
-    if (!localStorage.getItem('atoken')) {
-      navigate('/login');
-    }
-    me().then((res) => {
-      // setUser(res);
-      dispatch(setUser(res));
-      // console.log(res);
-    });
-  }, []);
+    useEffect(() => {
+        if (!localStorage.getItem('atoken')) {
+            navigate('/login');
+        }
+        me().then((res) => {
+            // setUser(res);
+            dispatch(setUser(res))
+
+            if (user.globalRole === "ROLE_USER") {
+                navigate('/profile');
+            }
+            // console.log(res);
+        });
+    }, []);
 
   const iconStyle = { width: rem(15), height: rem(15) };
 
@@ -74,12 +78,15 @@ const MainPage = () => {
     <div className={styles['main-page']}>
       <Tabs defaultValue="history">
         <Tabs.List>
-          <Tabs.Tab value="history" leftSection={<IconHistory style={iconStyle} />}>
-            История
-          </Tabs.Tab>
-          <Tabs.Tab value="settings" leftSection={<IconSettings style={iconStyle} />}>
-            Управление
-          </Tabs.Tab>
+                    {user.globalRole === 'ROLE_ADMIN' ? (
+                        <>
+              <Tabs.Tab value="history" leftSection={<IconHistory style={iconStyle} />}>
+                История
+              </Tabs.Tab>
+              <Tabs.Tab value="settings" leftSection={<IconSettings style={iconStyle} />}>
+                Управление
+              </Tabs.Tab>
+                    </>) : null}
           <Tabs.Tab value="new-push" leftSection={<IconPlus style={iconStyle} />}>
             Новое уведомление
           </Tabs.Tab>
