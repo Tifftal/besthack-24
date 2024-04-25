@@ -45,7 +45,6 @@ export type FullInfo = {
 } | null;
 
 const MainPage = () => {
-  // const [user, setUser] = useState<FullInfo>(null); // [1]
   const dispatch = useDispatch();
 
   const user = useSelector(selectUserState);

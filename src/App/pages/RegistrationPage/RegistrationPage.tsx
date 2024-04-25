@@ -39,8 +39,6 @@ const RegistrationPage = () => {
         localStorage.setItem('rtoken', response.jwtTokens.refresh);
       }
 
-      // store.dispatch({ type: 'SET_USER', payload: response });
-
       dispatch(setUser(response));
 
       const status = await generatePushToken();

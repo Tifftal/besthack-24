@@ -10,7 +10,7 @@ function fromDepartmentToGraph(departments: Department[]): graph {
     return {
       id: department.id,
       label: department.name.length > 10 ? department.name.slice(0, 10) + '...' : department.name,
-      color: randomColor(),
+      color: 'dodgerblue',
     };
   });
 
@@ -73,22 +73,6 @@ const options = {
   height: '500px',
 };
 
-function randomColor() {
-  const colors = [
-    '#e04141',
-    // '#e09c41',
-    // '#e0df41',
-    // '#7be041',
-    // '#41e0c9',
-    // '#41bfe0',
-    // '#4171e0',
-    // '#7a41e0',
-    // '#e041b1',
-    // '#e04141',
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
 export type GraphComponentProps = {
   departments: Department[];
   changeDepartment: (department: string) => void;
@@ -117,7 +101,7 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ departments, changeDepa
     counter: departments.length,
     graph: departments.length > 0 ? fromDepartmentToGraph(departments) : { nodes: [], edges: [] },
     events: {
-      select: ({ nodes, edges }) => {
+      select: ({ nodes }) => {
         changeDepartment(nodes[0]);
       },
     },
