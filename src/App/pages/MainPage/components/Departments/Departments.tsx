@@ -36,7 +36,7 @@ const Departments = () => {
       <Group m="sm">
         <Table miw={300}>
           <Table.Thead>
-            <Table.Tr >
+            <Table.Tr>
               <Table.Th>Отдел</Table.Th>
               <Table.Th>Количество сотрудников</Table.Th>
             </Table.Tr>

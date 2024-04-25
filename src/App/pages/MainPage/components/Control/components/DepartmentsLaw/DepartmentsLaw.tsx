@@ -182,8 +182,9 @@ const DepartmentsLaw = () => {
                 <Pill.Group>
                     {
                         selectedUsers.length !== 0 ?
-                            selectedUsers.map(user =>
+                            selectedUsers.map((user, idx) =>
                                 <Pill
+                                    key={idx}
                                     styles={{ root: { marginBottom: 10 } }}
                                     withRemoveButton
                                     onRemove={() => user && handleRemoveUser(user.id)}
@@ -331,8 +332,9 @@ const DepartmentsLaw = () => {
                 >
                     <Pill.Group>
                         {
-                            employees.length !== 0 ? employees.map(user =>
+                            employees.length !== 0 ? employees.map((user, idx) =>
                                 <Pill
+                                    key={idx}
                                     withRemoveButton
                                     onRemove={() => RemoveUserFromDepartment(department.id, user.id, "ROLE_EMPLOYEE")}
                                 >
@@ -360,8 +362,9 @@ const DepartmentsLaw = () => {
                 >
                     <Pill.Group>
                         {
-                            users.length !== 0 ? users.map(user =>
+                            users.length !== 0 ? users.map((user, idx) =>
                                 <Pill
+                                    key={idx}
                                     withRemoveButton
                                     onRemove={() => RemoveUserFromDepartment(department.id, user.id, "ROLE_USER")}
                                 >
