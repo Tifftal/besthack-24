@@ -11,7 +11,6 @@ import DepartmentBadge from './components/Department/DepartmentBadge';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserState } from '../../store/UserSlice/userSelector';
 import { setUser } from '../../store/UserSlice/UserSlice';
-import GraphComponent from './components/Graph/Graph';
 
 const convertDate = (date: string) => {
   const dateObj = new Date(date);
@@ -70,7 +69,6 @@ const ProfilePage = () => {
           <NavLink to="/">Вернуться на главную</NavLink>
         </Button>
       </div>
-      <GraphComponent />
       <Modal opened={opened} onClose={close} title="Редактирование профиля" centered>
         <form onSubmit={editForm.onSubmit(handleEdit)}>
           <TextInput label="Имя" placeholder="Имя" {...editForm.getInputProps('name')} />

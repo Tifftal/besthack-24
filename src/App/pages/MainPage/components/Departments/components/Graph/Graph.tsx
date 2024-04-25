@@ -1,8 +1,9 @@
 import Graph from 'react-graph-vis';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getDepartments } from '../../../../api/department';
-import { Department } from '../../../MainPage/MainPage';
+import { getDepartments } from '../../../../../../api/department';
+import { Department } from '../../../../MainPage';
+import { groupEnd } from 'console';
 
 function fromDepartmentToGraph(departments: Department[]): graph {
   const nodes = departments.map((department) => {
@@ -30,11 +31,12 @@ function fromDepartmentToGraph(departments: Department[]): graph {
     edges,
   };
 }
+export type node = { id: string; label: string; color: string };
 
-
+export type edge = { from: string; to: string };
 type graph = {
-  nodes: [{ id: string; label: string; color: string }];
-  edges: [{ from: string; to: string }];
+  nodes: node[];
+  edges: edge[];
 };
 
 const options = {
@@ -43,7 +45,7 @@ const options = {
       levelSeparation: 150,
       nodeSpacing: 100,
       blockShifting: true,
-    }
+    },
   },
   edges: {
     color: '#000000',
@@ -87,37 +89,35 @@ function randomColor() {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-const GraphComponent = () => {
+export type GraphComponentProps = {
+  changeDepartment: (department: string) => void;
+};
+
+const GraphComponent: React.FC<GraphComponentProps> = ({ changeDepartment }) => {
   const [graphState, setGraphState] = useState<graph>({
-    nodes: [{ id: '1', label: 'Node 1', color: '#e04141' }],
-    edges: [{ from: '1', to: '2' }],
+    nodes: [],
+    edges: [],
   });
 
   useEffect(() => {
     getDepartments().then((res) => {
-      // console.log(res);
+      console.log(res);
       const graph = fromDepartmentToGraph(res);
-      //   console.log(fromDepartmentToGraph(res));
+      console.log(graph);
       setGraphState(graph);
-      setState({
-        counter: graph.nodes.length,
-        graph: graph,
-        events: {
-          select: ({ nodes, edges }) => {
-            // console.log('Selected nodes:');
-            // console.log(nodes);
-            // console.log('Selected edges:');
-            // console.log(edges);
-            alert('Selected node: ' + nodes);
-          },
-          //   doubleClick: ({ pointer: { canvas } }) => {
-          //     createNode(canvas.x, canvas.y);
-          //   },
-        },
-      });
-      // console.log(graphState);
+      console.log(state)
     });
   }, []);
+
+  useEffect(() => {
+    console.log(graphState);
+    setState({
+      ...state,
+      graph: graphState,
+      counter: graphState.nodes.length,
+    });
+    console.log(state)
+  }, [graphState]);
 
   //   const createNode = (x, y) => {
   //     const color = randomColor();
@@ -140,22 +140,39 @@ const GraphComponent = () => {
     events: {
       select: ({ nodes, edges }) => {
         // console.log('Selected nodes:');
-        // console.log(nodes);
         // console.log('Selected edges:');
         // console.log(edges);
-        alert('Selected node: ' + nodes);
+        // alert('Selected node: ' + nodes);
+        changeDepartment(nodes[0]);
       },
       //   doubleClick: ({ pointer: { canvas } }) => {
       //     createNode(canvas.x, canvas.y);
       //   },
     },
   });
+
+  // const events =  {
+  //   select: ({ nodes, edges }) => {
+  //     // console.log('Selected nodes:');
+  //     console.log(nodes);
+  //     // console.log('Selected edges:');
+  //     // console.log(edges);
+  //     // alert('Selected node: ' + nodes);
+  //     changeDepartment(nodes[0]);
+  //   },
+  //   //   doubleClick: ({ pointer: { canvas } }) => {
+  //   //     createNode(canvas.x, canvas.y);
+  //   //   },
+
+  // };
   const { graph, events } = state;
-  return (
-    <div>
-      <Graph graph={graph} options={options} events={events} style={{ height: '640px' }} />
-    </div>
-  );
+  console.log(graph)
+  if (graph.nodes.length == 0 || graph.edges.length == 0) {
+    return null;
+  } else {
+    console.log(graph)
+    return <Graph graph={graph} options={options} events={events} style={{ height: '640px' }} />;
+  }
 };
 
 export default GraphComponent;
