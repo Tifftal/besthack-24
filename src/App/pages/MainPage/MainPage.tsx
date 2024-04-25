@@ -64,8 +64,7 @@ const MainPage = () => {
         me().then((res) => {
             // setUser(res);
             dispatch(setUser(res))
-
-            if (user.globalRole === "ROLE_USER") {
+            if (res.globalRole === "ROLE_USER") {
                 navigate('/profile');
             }
             // console.log(res);
