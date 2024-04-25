@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
-import { me } from '../../api/user/index';
+import { me, updateUser } from '../../api/user/index';
 import styles from './ProfilePage.module.scss';
 import { Group, Avatar, Text, Modal, Button, TextInput } from '@mantine/core';
 import { IconAt, IconEdit, IconHeart } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { updateUser } from '../../api/user/index';
 import { NavLink, useNavigate } from 'react-router-dom';
 import DepartmentBadge from './components/Department/DepartmentBadge';
 import { useDispatch, useSelector } from 'react-redux';
