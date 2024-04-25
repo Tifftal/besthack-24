@@ -68,9 +68,9 @@ const options = {
     opacity: 1,
     shape: 'dot',
     physics: false,
-    size: 25,
+    size: 20,
   },
-  height: '540px',
+  height: '500px',
 };
 
 function randomColor() {
@@ -165,7 +165,7 @@ const GraphComponent: React.FC<GraphComponentProps> = ({ departments, changeDepa
   if (graph.nodes.length == 0 || graph.edges.length == 0) {
     return null;
   } else {
-    return <Graph graph={graph} options={options} events={events} style={{ height: '640px', border: '1px solid black' }} />;
+    return <Graph graph={graph} options={options} events={events} style={{ height: '500px', border: '1px solid black' }} />;
   }
 };
 

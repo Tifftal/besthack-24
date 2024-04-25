@@ -110,10 +110,13 @@ const LoginPage = () => {
           </Button> */}
 
         </div>
-        {/* <div className={styles['login-page-form-reg']}>
+        <div className={styles['login-page-form-reg']}>
           <Text>Ещё нет аккаунта?</Text>
-          <NavLink to='/registration'>Зарегестрироваться</NavLink>
-        </div> */}
+          <NavLink to='/registration'>Зарегистрироваться</NavLink>
+        </div>
+        <div>
+          <Text>Не заходите в свой профиль с чужих устройств</Text>
+        </div>
         {/* Я бы удалил эту штуку, но вдруг кто-то есть герой */}
         {/* <YaOAuthButton onSuccess={handlYaSuccess} onError={handleYaError} /> */}
       </form>
