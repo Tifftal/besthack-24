@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { generatePushToken, register } from '../../api/user/index';
 import { useDispatch } from '../../store/store';
 import { setUser } from '../../store/UserSlice/UserSlice';
+import { useState } from 'react';
 
 export type RegResponse = {
   id: string;
@@ -19,6 +20,7 @@ export type RegResponse = {
 
 const RegistrationPage = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -29,7 +31,7 @@ const RegistrationPage = () => {
         form.values.password,
         form.values.name,
         form.values.middleName,
-        form.values.surname
+        form.values.surname,
       );
 
       if (response.jwtTokens) {
@@ -45,10 +47,11 @@ const RegistrationPage = () => {
 
       if (status === 200) {
         // console.log(status);
+        setError(null);
         navigate('/');
       }
     } catch (error) {
-      console.error(error);
+      setError(error);
     }
   };
 
@@ -73,16 +76,12 @@ const RegistrationPage = () => {
   return (
     <div className={styles['reg-page']}>
       <form onSubmit={form.onSubmit(handleRegistration)} className={styles['reg-page__form']}>
-        <TextInput
-          mt="sm"
-          label="Почта"
-          placeholder="Почта"
-          {...form.getInputProps('username')}
-        />
+        <TextInput mt="sm" label="Почта" placeholder="Почта" {...form.getInputProps('username')} />
         <TextInput mt="sm" label="Фамилия" placeholder="Фамилия" {...form.getInputProps('surname')} />
         <TextInput mt="sm" label="Имя" placeholder="Имя" {...form.getInputProps('name')} />
         <TextInput mt="sm" label="Отчество" placeholder="Отчество" {...form.getInputProps('middleName')} />
         <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
+        {error && <Text color="red">Пользователь с данной почтой уже существует</Text>}
         <div className={styles['reg-page__form-btn']}>
           <Button type="submit" mt="sm">
             Зарегистрироваться

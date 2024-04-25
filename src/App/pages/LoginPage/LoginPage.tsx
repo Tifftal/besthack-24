@@ -8,7 +8,6 @@ import axios from 'axios';
 import { setUser as setUserToStore } from '../../store/UserSlice/UserSlice';
 import { store } from '../../store/store';
 import { generatePushToken, login } from '../../api/user/index';
-import { IconBrandGoogleFilled } from '@tabler/icons-react';
 
 import styles from './LoginPage.module.scss';
 import { useDispatch } from 'react-redux';
@@ -42,13 +41,11 @@ const LoginPage = () => {
       dispatch(setUserToStore(res.data));
 
       const status = await generatePushToken();
-      console.log("STATUS", status);
       if (status === 200) {
         setError(null);
         navigate('/');
       }
     } catch (err) {
-      console.log(err);
       setError(err);
     }
   };
@@ -93,7 +90,7 @@ const LoginPage = () => {
   return (
     <div className={styles["login-page"]}>
       <form onSubmit={form.onSubmit(handleLogin)} className={styles["login-page-form"]}>
-        <TextInput mt="sm" label="Логин" placeholder="Логин" {...form.getInputProps('email')} />
+        <TextInput mt="sm" label="Почта" placeholder="Почта" {...form.getInputProps('email')} />
         <PasswordInput label="Пароль" placeholder="Пароль" {...form.getInputProps('password')} />
         {error && <Text color="red">Неверный логин или пароль</Text>}
         <div className={styles['login-page-form-btn']}>
