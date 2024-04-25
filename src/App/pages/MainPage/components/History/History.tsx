@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getHistory } from 'App/api/push';
-import { Notification, Select } from '@mantine/core';
+import { Notification, Select, Text } from '@mantine/core';
 
 import styles from './History.module.scss';
 import { getNotificationColor } from '../../../../helpers/getNotificationColor';
@@ -93,7 +93,6 @@ const History = ({ id }: { id?: string }) => {
                         }))
                     }
                     onChange={handleSelectChange}
-                    // value={creatorUserId}?
                     allowDeselect
                 />
                 <Select
@@ -104,12 +103,11 @@ const History = ({ id }: { id?: string }) => {
                         label: item.name,
                     }))}
                     onChange={handleSelectDepartmentChange}
-                    value={fromDepartmentId}
+                    allowDeselect
                 />
             </div>
 
-            {
-                history !== undefined &&
+            {history !== undefined && history?.length > 0 ? (
                 history.map(push => (
                     <div className={styles['history-not']} key={push.id}>
                         <div className={styles['history-not-owner']}>
@@ -146,7 +144,9 @@ const History = ({ id }: { id?: string }) => {
                         </Notification>
                     </div>
                 ))
-            }
+            ): (
+                <Text>Пусто</Text>
+            )}
 
         </div >
     )
