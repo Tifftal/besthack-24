@@ -119,7 +119,7 @@ export const updateUser = async (user: UserInitials) => {
 
 }
 
-export const getUsers = async ({ hasDepartment, departmentId, role }: { hasDepartment?: boolean, departmentId?: string, role?: string }) => {
+export const getUsers = async ({ hasDepartment, departmentId, role }: { hasDepartment?: boolean | null, departmentId?: string | null, role?: string }) => {
   try {
     let URL = `/main/user?page=0&size=${USERS_LIMIT}&sort=ASC`
     if (hasDepartment) {
@@ -145,7 +145,7 @@ export const getUsersAllowedToSend = async ({
   role,
   departmentId,
 }: {
-  hasDepartment?: boolean,
+  hasDepartment?: boolean | null,
   departmentId: string,
   role?: string
 }) => {

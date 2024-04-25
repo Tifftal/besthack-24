@@ -3,7 +3,7 @@ import styles from './NewPush.module.scss';
 import { RolesEnum, RolesToSelect } from './types';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDepartmentState } from '../../../../store/DepartmentSlice/departmentSelector';
-import { Button, Checkbox, Input, MultiSelect, Notification, Select, Textarea } from '@mantine/core';
+import { Button, Input, MultiSelect, Notification, Select, Textarea } from '@mantine/core';
 import { setUsers } from '../../../../store/UserSlice/UserSlice';
 import { getUsers, getUsersAllowedToSend } from '../../../../api/user/index';
 import { selectAllUsers, selectIsUserAdmin, selectUsersDepartments } from '../../../../store/UserSlice/userSelector';
@@ -16,7 +16,7 @@ const NewPush = () => {
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [department, setDepartment] = useState<string>('');
-    const [hasDepartment, setHasDepartment] = useState<boolean>(false);
+    const [hasDepartment, setHasDepartment] = useState<boolean | null>(null);
     const [departureDepartment, setDepartureDepartment] = useState<string>('');
     const [notification, setNotification] = useState<Record<string, string>>({
         title: '',
@@ -30,15 +30,17 @@ const NewPush = () => {
     const usersDepartments = useSelector(selectUsersDepartments);
     const users = useSelector(selectAllUsers);
 
-    const isAllowedToSend = !(notification.body && notification.title && departureDepartment && (selectedUsers || selectedDepartments))
+    const isAllowedToSend = !(notification.body && notification.title && (departureDepartment || isUserAdmin) && (selectedUsers || selectedDepartments))
 
+    // @ts-expect-error
     const formattedDepartments = departments.reduce((acc: { value: string, label: string }[], { id, name }: { id: string, name: string }) => {
         return [...acc, {
             value: id,
             label: name,
         }]
     }, []);
-    // TODO: добавить хук на форматирование данных после добавления новой регистрации с ФИО
+    
+    // @ts-expect-error
     const formattedUsers = users.reduce((acc: { value: string, label: string }[], { id, username, name, surname, middleName }: { id: string, username: string }) => {
         const formattedUser = {
             value: id,
@@ -83,8 +85,18 @@ const NewPush = () => {
         }
     }
 
-    const handleCheckDepartment = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setHasDepartment(e.target.checked);
+    const handleSelectHasDepartment = (select: string | null) => {
+        if (select === "null") {
+            setHasDepartment(null)   
+        }
+
+        if (select === "true") {
+            setHasDepartment(true)
+        }
+
+        if (select === "false") {
+            setHasDepartment(false);
+        }
     }
 
     const handleSelectDepartment = (selected: string | null) => {
@@ -125,7 +137,7 @@ const NewPush = () => {
             getUsers({
                 hasDepartment: hasDepartment,
                 role: role,
-                departmentId: department,
+                departmentId: null,
             })
                 .then(({ content }) => {
                     dispatch(setUsers(content));
@@ -157,13 +169,14 @@ const NewPush = () => {
                         defaultValue=''
                         checkIconPosition='left'
                     />
-
-                    <Select
-                        onChange={handleSelectDepartureDepartment}
-                        data={formattedUsersDepartments}
-                        label="Выберите деп-нт отправки"
-                        searchable
-                    />
+                    {!isUserAdmin ? (
+                        <Select
+                            onChange={handleSelectDepartureDepartment}
+                            data={formattedUsersDepartments}
+                            label="Выберите деп-нт отправки"
+                            searchable
+                        />
+                    ) : null}
 
                     <MultiSelect
                         data={formattedDepartments}
@@ -190,9 +203,21 @@ const NewPush = () => {
                         onChange={handleSelectUsers}
                     />
 
-                    <Checkbox
-                        onChange={handleCheckDepartment}
+                    <Select
+                        onChange={handleSelectHasDepartment}
                         label="Состоит в департаменте"
+                        data={
+                            [{
+                                value: 'true',
+                                label: 'Состоит в департаменте'
+                            }, {
+                                value: 'false',
+                                label: 'Не состоит в департаменте'
+                            }, {
+                                value: 'null',
+                                label: 'Неизвестно'
+                            }]
+                        }
                     />
 
                     <Button
